@@ -1,18 +1,61 @@
 (function() {
-    // -----------------------------------------------------------
-    // CONFIGURATION
-    // -----------------------------------------------------------
+    // ==========================================================================
+    // 1. BASE DE DONNÉES COMMUNALE (Valeurs représentatives par région)
+    // ==========================================================================
+    // Sud (Terres Rouges) = Très Calcaire (>30°f)
+    // Centre/Nord (SEBES) = Moyen/Doux (~15-25°f)
+    // Est (SIDERE) = Calcaire (~30°f)
+    // Luxembourg-Ville = Cas Spécial (-1)
+    
+    const LUX_DATA = {
+        // --- SUD & AGGLO (SES - Eau Dure) ---
+        "Bascharage": 35, "Käerjeng": 35, "Bettembourg": 35, "Clemency": 35, 
+        "Differdange": 35, "Dippach": 32, "Dudelange": 35, "Esch-sur-Alzette": 35, 
+        "Frisange": 32, "Garnich": 32, "Habscht": 32, "Hesperange": 32, "Kayl": 35, 
+        "Kehlen": 32, "Koerich": 32, "Kopstal": 32, "Leudelange": 32, "Mamer": 32, 
+        "Mondercange": 35, "Petange": 35, "Reckange-sur-Mess": 32, "Roeser": 35, 
+        "Rumelange": 35, "Sanem": 35, "Schifflange": 35, "Steinfort": 32, "Strassen": 32,
+        
+        // --- CENTRE & NORD (Mixte/SEBES - Eau Moyenne) ---
+        "Bertrange": 22, "Bissen": 20, "Boevange-sur-Attert": 20, "Brouch": 20, 
+        "Colmar-Berg": 20, "Contern": 22, "Diekirch": 20, "Erpeldange": 20, 
+        "Ettelbruck": 20, "Feulen": 20, "Fischbach": 20, "Grosbous": 20, 
+        "Heffingen": 25, "Helperknapp": 20, "Larochette": 25, "Lintgen": 20, 
+        "Lorentzweiler": 20, "Mersch": 22, "Mertzig": 13, /* Spécifique doux */ 
+        "Niederanven": 22, "Nommern": 25, "Sandweiler": 22, "Schieren": 20, 
+        "Schuttrange": 22, "Steinsel": 20, "Tuntange": 20, "Walferdange": 22, 
+        "Weiler-la-Tour": 25, 
+        
+        // --- EST (SIDERE - Eau Calcaire) ---
+        "Beaufort": 30, "Bech": 30, "Berdorf": 30, "Betzdorf": 30, "Biwer": 30, 
+        "Bous": 30, "Consdorf": 37, /* Très dur relevé */ "Dalheim": 30, "Echternach": 30, 
+        "Flaxweiler": 30, "Grevenmacher": 32, "Junglinster": 28, "Lenningen": 30, 
+        "Manternach": 30, "Mertert": 30, "Mondorf-les-Bains": 32, "Remich": 32, 
+        "Rosport-Mompach": 30, "Schengen": 32, "Stadtbredimus": 32, "Waldbillig": 30, 
+        "Waldbredimus": 30, "Wormeldange": 32, "Vallée de l'Ernz": 30,
+
+        // --- NORD (DEA - Eau Moyenne) ---
+        "Beckerich": 20, "Bettendorf": 20, "Boulaide": 18, "Bourscheid": 20, 
+        "Clervaux": 20, "Ell": 20, "Esch-sur-Sûre": 15, "Goesdorf": 20, 
+        "Kiischpelt": 20, "Lac de la Haute-Sûre": 15, "Parc Hosingen": 20, 
+        "Preizerdaul": 20, "Putscheid": 20, "Rambrouch": 20, "Redange": 20, 
+        "Reisdorf": 20, "Saeul": 20, "Tandel": 20, "Troisvierges": 20, 
+        "Useldange": 20, "Vianden": 20, "Vichten": 20, "Wahl": 20, 
+        "Weiswampach": 20, "Wiltz": 20, "Wincrange": 20, "Winseler": 20,
+
+        // --- CAS SPECIAL ---
+        "Luxembourg": -1
+    };
+
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
-        // URL du fichier (Si elle change, mettez la nouvelle ici)
-        apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251111-020330/wasserharte.geojson',
         vdlLink: 'https://www.vdl.lu/fr/vivre/domicile-au-quotidien/verifier-la-qualite-de-leau-chez-soi#',
         quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis'
     };
 
-    // -----------------------------------------------------------
-    // STYLES CSS (Design V15 - Kinetico)
-    // -----------------------------------------------------------
+    // ==========================================================================
+    // 2. DESIGN (IDENTIQUE FRANCE V23)
+    // ==========================================================================
     const css = `
         #wyws-luxembourg-container { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 0 auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
         .kw-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; }
@@ -47,14 +90,12 @@
         .kw-footer-block { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; margin-left: 30px; margin-right: 30px; }
         .kw-dealer-info { font-size: 11px; color: #555; font-weight: 400; font-family: Arial, sans-serif; line-height: 1.4; display: block; }
         .kw-source-data { font-size: 9px; color: #aaa; margin-top: 10px; display: block; }
-        .kw-loader { color: #888; display: none; margin: 10px; font-style: italic; }
-        .kw-error-msg { color: #d32f2f; display: none; margin: 10px; font-weight: bold; background:#ffebee; padding:10px; border-radius:5px;}
         @keyframes kw-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     `;
 
-    // -----------------------------------------------------------
-    // TEMPLATE HTML
-    // -----------------------------------------------------------
+    // ==========================================================================
+    // 3. TEMPLATE HTML
+    // ==========================================================================
     const htmlTemplate = `
         <div id="wyws-luxembourg-container">
             <div class="kw-header">
@@ -70,8 +111,6 @@
             <div class="kw-search-area">
                 <input type="text" id="kw-input-lux" class="kw-input" placeholder="Ex: Bertrange..." autocomplete="off">
                 <div id="kw-suggestions-lux" class="kw-suggestions"></div>
-                <div id="kw-loader-lux" class="kw-loader">Chargement des données...</div>
-                <div id="kw-error-lux" class="kw-error-msg"></div>
             </div>
 
             <div id="kw-slider-wrapper-lux" class="kw-slider-wrapper">
@@ -112,35 +151,31 @@
                 <div class="kw-dealer-info">
                     Aqua Purify<br>Authorized, Independent Kinetico Dealer
                 </div>
-                <span class="kw-source-data">Données : data.public.lu / Administration de la gestion de l'eau</span>
+                <span class="kw-source-data">Données : data.public.lu / Administration de la gestion de l'eau (màj 12/2025)</span>
             </div>
         </div>
     `;
 
-    // -----------------------------------------------------------
-    // LOGIQUE JAVASCRIPT
-    // -----------------------------------------------------------
+    // ==========================================================================
+    // 4. LOGIQUE
+    // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
         if (!root) return;
 
-        // Injection CSS & HTML
         const styleTag = document.createElement('style');
         styleTag.textContent = css;
         document.head.appendChild(styleTag);
         root.innerHTML = htmlTemplate;
 
-        // Éléments
+        // Elements
         const input = document.getElementById('kw-input-lux');
         const suggestions = document.getElementById('kw-suggestions-lux');
-        const loader = document.getElementById('kw-loader-lux');
-        const errorMsg = document.getElementById('kw-error-lux');
         
         const resultPanel = document.getElementById('kw-result-lux');
         const sliderWrapper = document.getElementById('kw-slider-wrapper-lux');
         const messageStandard = document.getElementById('kw-message-standard');
         const vdlContainer = document.getElementById('kw-vdl-container');
-        
         const displayCommune = document.getElementById('kw-commune-display');
         const drop = document.getElementById('kw-drop-lux');
         const dropShape = document.getElementById('kw-drop-shape-lux');
@@ -149,80 +184,17 @@
         const verdictDesc = document.getElementById('kw-verdict-desc');
         const ctaBtn = document.getElementById('kw-cta-btn-lux');
 
-        let communesData = [];
+        // Préparation de la liste triée
+        const communesList = Object.keys(LUX_DATA).sort();
 
-        // --- CHARGEMENT INTELLIGENT DES DONNÉES ---
-        async function loadData() {
-            try {
-                loader.style.display = 'block';
-                const response = await fetch(CONFIG.apiUrl);
-                
-                if (!response.ok) throw new Error('Erreur réseau (' + response.status + ')');
-                
-                const geoData = await response.json();
-                
-                if(!geoData.features || geoData.features.length === 0) {
-                    throw new Error("Fichier vide ou structure incorrecte.");
-                }
-
-                // 1. SCANNER DE COLONNES (Le secret pour que ça marche)
-                // On regarde la première ligne pour trouver les bons noms de colonnes
-                const props = geoData.features[0].properties;
-                let keyName = null;
-                let keyVal = null;
-
-                const keys = Object.keys(props);
-                // On cherche une colonne qui contient "Commune"
-                keyName = keys.find(k => k.toLowerCase().includes("commune"));
-                // On cherche une colonne qui contient "Durete" ou "WSZ"
-                keyVal = keys.find(k => k.toLowerCase().includes("wsz") || k.toLowerCase().includes("durete"));
-
-                // Fallback si le scanner échoue (noms bizarres)
-                if (!keyName || !keyVal) {
-                    console.warn("Scanner auto échoué, essai des clés standards...");
-                    keyName = 'trinkwasser.GISADMIN.DWDnationalReportingDurete.Commune';
-                    keyVal = 'trinkwasser.GISADMIN.DWDnationalReportingDurete.WSZDurete';
-                }
-
-                // 2. EXTRACTION DES DONNÉES
-                const communesMap = new Map();
-                
-                geoData.features.forEach(feature => {
-                    const name = feature.properties[keyName];
-                    const th = feature.properties[keyVal];
-                    
-                    if (name && typeof name === 'string' && !name.startsWith('*')) {
-                        const cleanName = name.trim();
-                        // On ne garde que si on a un nom valide
-                        if (!communesMap.has(cleanName)) {
-                            // Si la dureté est null ou undefined, on met 0
-                            const safeTH = (th !== null && th !== undefined) ? parseFloat(th) : 0;
-                            communesMap.set(cleanName, { name: cleanName, th: safeTH });
-                        }
-                    }
-                });
-                
-                communesData = Array.from(communesMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'fr'));
-                loader.style.display = 'none';
-                
-                if(communesData.length === 0) throw new Error("Aucune commune trouvée dans le fichier.");
-
-            } catch (e) {
-                console.error(e);
-                loader.style.display = 'none';
-                errorMsg.innerHTML = "Erreur de chargement.<br><small>Impossible de lire les données publiques.</small>";
-                errorMsg.style.display = 'block';
-            }
-        }
-
-        // --- MOTEUR DE RECHERCHE ---
+        // RECHERCHE
         input.addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
             
+            // Reset Visuel
             if(val.length < 2) { 
                 suggestions.style.display = 'none'; 
                 if(val.length === 0) {
-                    // Reset état
                     drop.style.opacity = '0';
                     resultPanel.style.display = 'none';
                     sliderWrapper.style.display = 'block';
@@ -230,45 +202,45 @@
                 return; 
             }
 
-            const matches = communesData.filter(c => c.name.toLowerCase().includes(val)).slice(0, 8);
+            const matches = communesList.filter(c => c.toLowerCase().includes(val)).slice(0, 8);
             
             suggestions.innerHTML = '';
             if(!matches.length) { suggestions.style.display = 'none'; return; }
 
-            matches.forEach(c => {
+            matches.forEach(name => {
                 const div = document.createElement('div');
                 div.className = 'kw-suggestion-item';
-                div.textContent = c.name;
+                div.textContent = name;
                 div.onclick = () => {
-                    input.value = c.name;
+                    input.value = name;
                     suggestions.style.display = 'none';
-                    processSelection(c);
+                    processSelection(name);
                 };
                 suggestions.appendChild(div);
             });
             suggestions.style.display = 'block';
         });
 
-        // --- AFFICHAGE ---
-        function processSelection(commune) {
-            displayCommune.textContent = "Qualité de l'eau à " + commune.name;
+        // SELECTION
+        function processSelection(name) {
+            displayCommune.textContent = "Qualité de l'eau à " + name;
             resultPanel.style.display = 'block';
+            
+            const value = LUX_DATA[name];
 
-            if (commune.name.toLowerCase() === 'luxembourg') {
-                // CAS VDL
+            if (value === -1 || name.toLowerCase() === 'luxembourg') {
                 sliderWrapper.style.display = 'none';
                 messageStandard.style.display = 'none';
                 vdlContainer.style.display = 'block';
             } else {
-                // CAS STANDARD
                 vdlContainer.style.display = 'none';
                 sliderWrapper.style.display = 'block';
                 messageStandard.style.display = 'block';
-                updateScoreUI(commune.th);
+                updateScoreUI(value);
             }
         }
 
-        // --- CALCUL DU SCORE ---
+        // SCORE
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -312,24 +284,19 @@
             dropShape.style.background = color;
             dropShape.style.borderColor = "white";
             
-            // Animation
             drop.style.opacity = '1';
             const percent = ((score - 30) / 70) * 100;
             drop.style.left = `${percent}%`;
         }
 
-        // Fermeture clic extérieur
         document.addEventListener('click', (e) => {
             if(input && suggestions && !input.contains(e.target) && !suggestions.contains(e.target)) {
                 suggestions.style.display = 'none';
             }
         });
-
-        // Lancement
-        loadData();
     }
 
-    // CHECKER AUTOMATIQUE (Pour CMS)
+    // CHECKER
     let attempts = 0;
     const interval = setInterval(function() {
         const root = document.getElementById(CONFIG.containerId);
