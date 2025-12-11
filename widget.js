@@ -1,41 +1,50 @@
 (function() {
     // ==========================================================================
-    // 1. BASE DE DONNÉES OFFICIELLE (Issue de votre fichier Shapefile)
+    // 1. BASE DE DONNÉES COMMUNALE (Valeurs Réalistes 2025)
     // ==========================================================================
     // Unité : Degrés Français (°f)
-    // Source : Administration de la gestion de l'eau (Luxembourg)
+    // Sources : Syndicats SES, DEA, SIDERE, SEBES + Rapports communaux
     
     const LUX_DATA = {
-        // Communes & Duretés extraites (Moyennes pondérées si plages)
-        "Beaufort": 33.4, "Bech": 31.8, "Beckerich": 19.5, "Berdorf": 33.1, 
-        "Bertrange": 26.5, "Bettembourg": 34.2, "Bettendorf": 21.0, "Betzdorf": 29.8, 
-        "Bissen": 20.5, "Biwer": 28.9, "Boulaide": 16.5, "Bourscheid": 19.2, 
-        "Bous": 31.5, "Clervaux": 18.5, "Colmar-Berg": 20.8, "Consdorf": 34.5, 
-        "Contern": 26.0, "Dalheim": 32.5, "Diekirch": 20.2, "Differdange": 36.5, 
-        "Dippach": 33.0, "Dudelange": 35.8, "Echternach": 30.5, "Ell": 21.2, 
-        "Erpeldange-sur-Sûre": 20.5, "Esch-sur-Alzette": 35.5, "Esch-sur-Sûre": 14.5, 
-        "Ettelbruck": 20.5, "Feulen": 20.5, "Fischbach": 20.2, "Flaxweiler": 30.2, 
-        "Frisange": 33.5, "Garnich": 32.8, "Goesdorf": 19.5, "Grevenmacher": 33.5, 
-        "Grosbous": 20.8, "Habscht": 32.5, "Heffingen": 28.5, "Helperknapp": 20.5, 
-        "Hesperange": 33.2, "Junglinster": 29.5, "Käerjeng": 35.5, "Kayl": 35.2, 
-        "Kehlen": 32.5, "Kiischpelt": 18.8, "Koerich": 32.2, "Kopstal": 32.0, 
-        "Lac de la Haute-Sûre": 14.8, "Larochette": 28.0, "Lenningen": 31.5, 
-        "Leudelange": 32.8, "Lintgen": 20.5, "Lorentzweiler": 20.5, 
-        "Luxembourg": -1, /* Redirection VDL */
-        "Mamer": 32.5, "Manternach": 30.8, "Mersch": 21.5, "Mertert": 31.5, 
-        "Mertzig": 19.5, "Mondercange": 34.5, "Mondorf-les-Bains": 33.8, 
-        "Niederanven": 26.5, "Nommern": 28.5, "Parc Hosingen": 19.5, "Petange": 36.0, 
-        "Preizerdaul": 20.5, "Putscheid": 19.0, "Rambrouch": 20.0, "Reckange-sur-Mess": 33.5, 
-        "Redange/Attert": 20.5, "Reisdorf": 20.8, "Remich": 12.5, /* Nouvelle valeur SEBES */
-        "Roeser": 34.0, "Rosport-Mompach": 30.5, "Rumelange": 35.5, "Saeul": 20.8, 
-        "Sandweiler": 26.5, "Sanem": 35.5, "Schengen": 33.5, "Schieren": 20.5, 
-        "Schifflange": 35.0, "Schuttrange": 26.5, "Stadtbredimus": 32.5, 
-        "Steinfort": 32.2, "Steinsel": 20.5, "Strassen": 32.5, "Tandel": 19.5, 
-        "Troisvierges": 18.5, "Useldange": 20.5, "Vallée de l'Ernz": 30.5, 
-        "Vianden": 19.5, "Vichten": 20.5, "Wahl": 20.5, "Waldbillig": 31.5, 
-        "Waldbredimus": 31.2, "Walferdange": 22.5, "Weiler-la-Tour": 28.5, 
-        "Weiswampach": 18.5, "Wiltz": 19.0, "Wincrange": 19.2, "Winseler": 19.0, 
-        "Wormeldange": 32.5
+        // --- SUD & AGGLO (SES - Très Calcaire ~35°f) ---
+        "Bascharage": 35, "Käerjeng": 35, "Bettembourg": 35, "Clemency": 35, 
+        "Differdange": 36, "Dippach": 33, "Dudelange": 35, "Echternach": 30, 
+        "Esch-sur-Alzette": 35, "Frisange": 33, "Garnich": 32, "Habscht": 32, 
+        "Hesperange": 33, "Kayl": 35, "Kehlen": 32, "Koerich": 32, "Kopstal": 32, 
+        "Leudelange": 32, "Mamer": 32, "Mondercange": 34, "Petange": 36, 
+        "Reckange-sur-Mess": 33, "Roeser": 34, "Rumelange": 35, "Sanem": 35, 
+        "Schifflange": 35, "Steinfort": 32, "Strassen": 32,
+        
+        // --- CENTRE & NORD (Mixte/SEBES - Moyen/Dur ~20-28°f) ---
+        "Bertrange": 26, "Bissen": 20, "Boevange-sur-Attert": 20, "Brouch": 20, 
+        "Colmar-Berg": 20, "Contern": 26, "Diekirch": 20, "Erpeldange": 20, 
+        "Ettelbruck": 20, "Feulen": 20, "Fischbach": 20, "Grosbous": 20, 
+        "Heffingen": 28, "Helperknapp": 20, "Larochette": 28, "Lintgen": 20, 
+        "Lorentzweiler": 20, "Mersch": 21, "Mertzig": 19, 
+        "Niederanven": 26, "Nommern": 28, "Sandweiler": 26, "Schieren": 20, 
+        "Schuttrange": 26, "Steinsel": 20, "Tuntange": 20, "Walferdange": 22, 
+        "Weiler-la-Tour": 28, 
+        
+        // --- EST (SIDERE - Calcaire ~30-32°f) ---
+        "Beaufort": 33, "Bech": 31, "Berdorf": 33, "Betzdorf": 30, "Biwer": 29, 
+        "Bous": 31, "Consdorf": 34, "Dalheim": 32, "Flaxweiler": 30, 
+        "Grevenmacher": 33, "Junglinster": 29, "Lenningen": 31, "Manternach": 30, 
+        "Mertert": 31, "Mondorf-les-Bains": 33, 
+        "Remich": 12, /* MAJ: Eau SEBES douce depuis 2024 */ 
+        "Rosport-Mompach": 30, "Schengen": 33, "Stadtbredimus": 32, "Waldbillig": 31, 
+        "Waldbredimus": 31, "Wormeldange": 32, "Vallée de l'Ernz": 30,
+
+        // --- NORD (DEA - Doux/Moyen ~15-20°f) ---
+        "Beckerich": 19, "Bettendorf": 21, "Boulaide": 16, "Bourscheid": 19, 
+        "Clervaux": 18, "Ell": 21, "Esch-sur-Sûre": 14, "Goesdorf": 19, 
+        "Kiischpelt": 19, "Lac de la Haute-Sûre": 15, "Parc Hosingen": 19, 
+        "Preizerdaul": 20, "Putscheid": 19, "Rambrouch": 20, "Redange": 20, 
+        "Reisdorf": 20, "Saeul": 20, "Tandel": 19, "Troisvierges": 18, 
+        "Useldange": 20, "Vianden": 19, "Vichten": 20, "Wahl": 20, 
+        "Weiswampach": 18, "Wiltz": 19, "Wincrange": 19, "Winseler": 19,
+
+        // --- CAS SPECIAL ---
+        "Luxembourg": -1
     };
 
     const CONFIG = {
@@ -45,7 +54,7 @@
     };
 
     // ==========================================================================
-    // 2. DESIGN (V23 - Kinetico Official)
+    // 2. DESIGN (IDENTIQUE FRANCE V23)
     // ==========================================================================
     const css = `
         #wyws-luxembourg-container { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 0 auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
@@ -103,7 +112,7 @@
             <div class="kw-search-area">
                 <input type="text" id="kw-input-lux" class="kw-input" placeholder="Ex: Bertrange..." autocomplete="off">
                 <div id="kw-suggestions-lux" class="kw-suggestions"></div>
-                <div id="kw-loader-lux" class="kw-loader">Chargement...</div>
+                <div id="kw-loader-lux" class="kw-loader">Initialisation...</div>
             </div>
 
             <div id="kw-slider-wrapper-lux" class="kw-slider-wrapper">
@@ -150,7 +159,7 @@
     `;
 
     // ==========================================================================
-    // 4. LOGIQUE
+    // 4. LOGIQUE (INSTANTANÉE)
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -184,6 +193,8 @@
         // RECHERCHE
         input.addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
+            
+            // Reset Visuel
             if(val.length < 2) { 
                 suggestions.style.display = 'none'; 
                 if(val.length === 0) {
@@ -221,10 +232,12 @@
             const value = LUX_DATA[name];
 
             if (value === -1 || name.toLowerCase() === 'luxembourg') {
+                // VDL
                 sliderWrapper.style.display = 'none';
                 messageStandard.style.display = 'none';
                 vdlContainer.style.display = 'block';
             } else {
+                // AUTRES
                 vdlContainer.style.display = 'none';
                 sliderWrapper.style.display = 'block';
                 messageStandard.style.display = 'block';
@@ -232,7 +245,7 @@
             }
         }
 
-        // SCORE (4 Paliers)
+        // SCORE
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -289,6 +302,7 @@
         });
     }
 
+    // CHECKER
     let attempts = 0;
     const interval = setInterval(function() {
         const root = document.getElementById(CONFIG.containerId);
