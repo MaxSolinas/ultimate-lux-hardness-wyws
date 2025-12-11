@@ -5,9 +5,8 @@
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
         
-        // LIEN VERS LE FICHIER GEOJSON (A mettre à jour si le gouvernement change le lien)
-        // Utilisez le lien "Stable" ou le dernier en date disponible sur data.public.lu
-        apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251111-020330/wasserharte.geojson',
+        // URL STABLE - se met à jour automatiquement quand le gouvernement publie de nouvelles données
+        apiUrl: 'https://data.public.lu/fr/datasets/r/f0829196-054a-49bd-8ea7-b24db8c9eefb',
         
         vdlLink: 'https://www.vdl.lu/fr/vivre/domicile-au-quotidien/verifier-la-qualite-de-leau-chez-soi#',
         quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis',
