@@ -1,20 +1,45 @@
 (function() {
     // ==========================================================================
-    // CONFIGURATION (LUXEMBOURG - API LIVE)
+    // CONFIGURATION
     // ==========================================================================
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
-        
-        // URL STABLE - se met à jour automatiquement quand le gouvernement publie de nouvelles données
-        apiUrl: 'https://data.public.lu/fr/datasets/r/f0829196-054a-49bd-8ea7-b24db8c9eefb',
-        
+        apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
         vdlLink: 'https://www.vdl.lu/fr/vivre/domicile-au-quotidien/verifier-la-qualite-de-leau-chez-soi#',
         quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis',
         websiteLink: 'https://www.aquapurify.eu'
     };
 
     // ==========================================================================
-    // CSS ISOLÉ (.kw-lux-...)
+    // DONNÉES FALLBACK (102 Communes Luxembourg - Décembre 2024)
+    // ==========================================================================
+    const FALLBACK_DATA = {
+        "Beaufort": 33, "Bech": 31, "Beckerich": 19, "Berdorf": 33, "Bertrange": 26,
+        "Bettembourg": 35, "Bettendorf": 21, "Betzdorf": 30, "Bissen": 20, "Biwer": 29,
+        "Boulaide": 16, "Bourscheid": 19, "Bous": 31, "Clervaux": 18, "Colmar-Berg": 20,
+        "Consdorf": 34, "Contern": 26, "Dalheim": 32, "Diekirch": 20, "Differdange": 36,
+        "Dippach": 33, "Dudelange": 35, "Echternach": 30, "Ell": 21, "Erpeldange-sur-Sûre": 20,
+        "Esch-sur-Alzette": 35, "Esch-sur-Sûre": 14, "Ettelbruck": 20, "Feulen": 20,
+        "Fischbach": 20, "Flaxweiler": 30, "Frisange": 33, "Garnich": 32, "Goesdorf": 19,
+        "Grevenmacher": 33, "Grosbous": 20, "Habscht": 32, "Heffingen": 28, "Helperknapp": 20,
+        "Hesperange": 33, "Hobscheid": 32, "Junglinster": 29, "Käerjeng": 35, "Kayl": 35,
+        "Kehlen": 32, "Kiischpelt": 19, "Koerich": 32, "Kopstal": 32, "Lac de la Haute-Sûre": 15,
+        "Larochette": 28, "Lenningen": 31, "Leudelange": 32, "Lintgen": 20, "Lorentzweiler": 20,
+        "Luxembourg": -1, "Mamer": 32, "Manternach": 30, "Mersch": 21, "Mertert": 31,
+        "Mertzig": 19, "Mondercange": 34, "Mondorf-les-Bains": 33, "Niederanven": 26,
+        "Nommern": 28, "Parc Hosingen": 19, "Pétange": 36, "Préizerdaul": 20, "Putscheid": 19,
+        "Rambrouch": 20, "Reckange-sur-Mess": 33, "Redange-sur-Attert": 20, "Reisdorf": 20,
+        "Remich": 12, "Roeser": 34, "Rosport-Mompach": 30, "Rumelange": 35, "Saeul": 20,
+        "Sandweiler": 26, "Sanem": 35, "Schengen": 33, "Schieren": 20, "Schifflange": 35,
+        "Schuttrange": 26, "Stadtbredimus": 32, "Steinfort": 32, "Steinsel": 20, "Strassen": 32,
+        "Tandel": 19, "Troisvierges": 18, "Useldange": 20, "Vallée de l'Ernz": 30, "Vianden": 19,
+        "Vichten": 20, "Wahl": 20, "Waldbillig": 31, "Waldbredimus": 31, "Walferdange": 22,
+        "Weiler-la-Tour": 28, "Weiswampach": 18, "Wiltz": 19, "Wincrange": 19, "Winseler": 19,
+        "Wormeldange": 32
+    };
+
+    // ==========================================================================
+    // CSS
     // ==========================================================================
     const css = `
         #wyws-luxembourg-container { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
@@ -48,16 +73,11 @@
         .kw-lux-cta-button:hover { background: #003d7a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,84,164,0.3); }
         .kw-lux-redirect-btn { display: inline-block; background-color: #00ADEF; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px; transition: background-color 0.3s; }
         .kw-lux-redirect-btn:hover { background-color: #005bb8; }
-        
         .kw-lux-footer-block { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; margin-left: 30px; margin-right: 30px; }
         .kw-lux-dealer-info { font-size: 11px; color: #555; font-weight: 400; font-family: Arial, sans-serif; line-height: 1.4; display: block; }
         .kw-lux-dealer-link { color: #555; text-decoration: none; font-weight: 400; cursor: pointer; transition: color 0.2s; }
         .kw-lux-dealer-link:hover { color: #000; }
-        
         .kw-lux-source-data { font-size: 9px; color: #aaa; margin-top: 10px; display: block; }
-        .kw-lux-loader { color: #888; display: none; margin: 10px; font-style: italic; }
-        .kw-lux-error-msg { color: #d32f2f; display: none; margin: 10px; font-weight: bold; background:#ffebee; padding:10px; border-radius:5px; font-size: 0.9em; }
-        
         @keyframes kw-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     `;
 
@@ -75,14 +95,10 @@
                 </h2>
                 <div class="kw-lux-subtext">Découvrez la qualité de votre eau en quelques secondes.</div>
             </div>
-
             <div class="kw-lux-search-area">
                 <input type="text" id="kw-input-lux" class="kw-lux-input" placeholder="Ex: Bertrange..." autocomplete="off">
                 <div id="kw-suggestions-lux" class="kw-lux-suggestions"></div>
-                <div id="kw-loader-lux" class="kw-lux-loader">Connexion aux données...</div>
-                <div id="kw-error-lux" class="kw-lux-error-msg"></div>
             </div>
-
             <div id="kw-slider-wrapper-lux" class="kw-lux-slider-wrapper">
                 <div class="kw-lux-slider-container">
                     <div class="kw-lux-slider-bar">
@@ -101,22 +117,18 @@
                     </div>
                 </div>
             </div>
-
             <div id="kw-result-lux" class="kw-lux-result-panel" style="display:none;">
                 <div id="kw-commune-display-lux" class="kw-lux-commune-title"></div>
-
                 <div id="kw-message-standard-lux" class="kw-lux-message-box">
                     <strong id="kw-verdict-title-lux" style="font-size: 1.2em; display:block; margin-bottom:8px;"></strong>
                     <div id="kw-verdict-desc-lux" style="font-size: 0.95em; color:#555; margin:0; line-height: 1.5;"></div>
                     <a href="${CONFIG.quoteLink}" id="kw-cta-btn-lux" class="kw-lux-cta-button">RAISE YOUR WATER SCORE TODAY!</a>
                 </div>
-
                 <div id="kw-vdl-container-lux" style="display:none; text-align: center; margin-top:20px;">
                     <p style="color:#666;">La Ville de Luxembourg possède un réseau complexe avec plusieurs sources d'eau différentes.</p>
                     <a href="${CONFIG.vdlLink}" target="_blank" class="kw-lux-redirect-btn">Vérifier mon adresse précise sur vdl.lu</a>
                 </div>
             </div>
-
             <div class="kw-lux-footer-block">
                 <div class="kw-lux-dealer-info">
                     <a href="${CONFIG.websiteLink}" target="_blank" class="kw-lux-dealer-link">Aqua Purify</a><br>
@@ -128,7 +140,7 @@
     `;
 
     // ==========================================================================
-    // LOGIQUE (SCANNER & FETCH)
+    // LOGIQUE
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -139,11 +151,8 @@
         document.head.appendChild(styleTag);
         root.innerHTML = htmlTemplate;
 
-        // Elements
         const input = document.getElementById('kw-input-lux');
         const suggestions = document.getElementById('kw-suggestions-lux');
-        const loader = document.getElementById('kw-loader-lux');
-        const errorMsg = document.getElementById('kw-error-lux');
         const resultPanel = document.getElementById('kw-result-lux');
         const sliderWrapper = document.getElementById('kw-slider-wrapper-lux');
         const messageStandard = document.getElementById('kw-message-standard-lux');
@@ -158,64 +167,50 @@
 
         let communesData = [];
 
-        // --- CHARGEMENT INTELLIGENT ---
+        // Charger depuis FALLBACK immédiatement
+        function loadFromFallback() {
+            communesData = Object.entries(FALLBACK_DATA).map(([name, th]) => ({ name, th }))
+                .sort((a, b) => a.name.localeCompare(b.name, 'fr'));
+        }
+
+        // Tenter l'API, sinon fallback
         async function loadData() {
             try {
-                loader.style.display = 'block';
                 const response = await fetch(CONFIG.apiUrl);
-                if (!response.ok) throw new Error('Erreur de connexion aux données publiques.');
+                if (!response.ok) throw new Error('API indisponible');
                 
                 const geoData = await response.json();
-                
-                if (!geoData.features || geoData.features.length === 0) {
-                    throw new Error("Le fichier de données est vide.");
-                }
+                if (!geoData.features || geoData.features.length === 0) throw new Error('Données vides');
 
-                // 1. SCANNER DE CLES (Le secret pour que ça marche peu importe le nom)
                 const props = geoData.features[0].properties;
                 const keys = Object.keys(props);
-                
-                // On cherche une clé qui contient "Commune" (ex: "trinkwasser...Commune")
                 const keyName = keys.find(k => k.toLowerCase().includes('commune'));
-                // On cherche une clé qui contient "WSZ" ou "Durete"
                 const keyVal = keys.find(k => k.toLowerCase().includes('wsz') || k.toLowerCase().includes('durete'));
 
-                if (!keyName || !keyVal) {
-                    console.warn("Clés introuvables via scanner. Essai fallback...");
-                    // En dernier recours, on tente les clés standards connues
-                }
+                if (!keyName || !keyVal) throw new Error('Format inattendu');
 
                 const communesMap = new Map();
-                
                 geoData.features.forEach(feature => {
-                    // Utilisation des clés trouvées dynamiquement
                     const name = feature.properties[keyName];
                     const th = feature.properties[keyVal];
-                    
                     if (name && typeof name === 'string' && !name.startsWith('*')) {
                         const cleanName = name.trim();
                         if (!communesMap.has(cleanName)) {
-                            // Sécurité : si th est null, on met 0
-                            const val = (th !== null && th !== undefined) ? parseFloat(th) : 0;
-                            communesMap.set(cleanName, { name: cleanName, th: val });
+                            communesMap.set(cleanName, { name: cleanName, th: parseFloat(th) || 0 });
                         }
                     }
                 });
                 
                 communesData = Array.from(communesMap.values()).sort((a, b) => a.name.localeCompare(b.name, 'fr'));
-                loader.style.display = 'none';
-
-                if (communesData.length === 0) throw new Error("Aucune commune trouvée après analyse.");
-
+                console.log('✅ Widget: API chargée (' + communesData.length + ' communes)');
+                
             } catch (e) {
-                console.error(e);
-                loader.style.display = 'none';
-                errorMsg.innerHTML = "Impossible de charger les données.<br><small>" + e.message + "</small>";
-                errorMsg.style.display = 'block';
+                console.warn('⚠️ Widget: API échouée, utilisation fallback -', e.message);
+                loadFromFallback();
             }
         }
 
-        // --- RECHERCHE ---
+        // Recherche
         input.addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
             if(val.length < 2) { 
@@ -245,12 +240,11 @@
             suggestions.style.display = 'block';
         });
 
-        // --- AFFICHAGE ---
         function processSelection(commune) {
             displayCommune.textContent = "Qualité de l'eau à " + commune.name;
             resultPanel.style.display = 'block';
             
-            if (commune.name.toLowerCase() === 'luxembourg') {
+            if (commune.name.toLowerCase() === 'luxembourg' || commune.th === -1) {
                 sliderWrapper.style.display = 'none';
                 messageStandard.style.display = 'none';
                 vdlContainer.style.display = 'block';
@@ -262,7 +256,6 @@
             }
         }
 
-        // --- SCORE & TEXTES ---
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -277,13 +270,21 @@
             let color, title, text;
             
             if (th < 12) {
-                color = '#00ADEF'; title = "EAU DOUCE (OK)"; text = `Votre eau (${th.toFixed(1)}°f) respecte le seuil de confort de référence (12°f).<br>Aucun traitement n'est nécessaire.`; ctaBtn.style.display = 'none';
+                color = '#00ADEF'; title = "EAU DOUCE (OK)"; 
+                text = `Votre eau (${th.toFixed(1)}°f) respecte le seuil de confort de référence (12°f).<br>Aucun traitement n'est nécessaire.`; 
+                ctaBtn.style.display = 'none';
             } else if (th < 15) {
-                color = '#00ADEF'; title = "EAU PEU CALCAIRE"; text = `Votre eau (${th.toFixed(1)}°f) est légèrement au-dessus de la référence (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#00ADEF'; title = "EAU PEU CALCAIRE"; 
+                text = `Votre eau (${th.toFixed(1)}°f) est légèrement au-dessus de la référence (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             } else if (th < 30) {
-                color = '#E5007E'; title = "ADOUCISSEUR RECOMMANDÉ"; text = `Votre eau est calcaire (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#E5007E'; title = "ADOUCISSEUR RECOMMANDÉ"; 
+                text = `Votre eau est calcaire (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             } else {
-                color = '#F57F20'; title = "ADOUCISSEUR INDISPENSABLE"; text = `Votre eau est très dure (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#F57F20'; title = "ADOUCISSEUR INDISPENSABLE"; 
+                text = `Votre eau est très dure (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             }
 
             verdictTitle.textContent = title;
@@ -304,6 +305,7 @@
             }
         });
 
+        // Charger les données (API avec fallback)
         loadData();
     }
 
