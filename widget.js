@@ -122,7 +122,7 @@
                 <div id="kw-message-standard-lux" class="kw-lux-message-box">
                     <strong id="kw-verdict-title-lux" style="font-size: 1.2em; display:block; margin-bottom:8px;"></strong>
                     <div id="kw-verdict-desc-lux" style="font-size: 0.95em; color:#555; margin:0; line-height: 1.5;"></div>
-                    <a href="${CONFIG.quoteLink}" id="kw-cta-btn-lux" class="kw-lux-cta-button">RAISE YOUR WATER SCORE TODAY!</a>
+                    <a href="${CONFIG.quoteLink}" id="kw-cta-btn-lux" class="kw-lux-cta-button">AMELIOREZ VOTRE WATER SCORE AUJOURD'HUI!</a>
                 </div>
                 <div id="kw-vdl-container-lux" style="display:none; text-align: center; margin-top:20px;">
                     <p style="color:#666;">La Ville de Luxembourg possède un réseau complexe avec plusieurs sources d'eau différentes.</p>
