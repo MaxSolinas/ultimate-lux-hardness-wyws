@@ -14,9 +14,10 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (Base V41 - Complète)
+    // 2. DONNÉES MAÎTRES (Base V41 + Correctif Remich)
     // ==========================================================================
     const MASTER_DATA = {
+        // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
         "Belair-Nord": { th: 28.8, city: "Luxembourg" }, "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
         "Verlorenkost": { th: 32.0, city: "Luxembourg" }, "Cents": { th: 27.4, city: "Luxembourg" },
@@ -30,6 +31,8 @@
         "Weimershof": { th: 27.4, city: "Luxembourg" }, "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
         "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
+
+        // --- RESTE DU PAYS ---
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -100,7 +103,10 @@
         "Reckange-sur-Mess": { th: 33, localities: ["Reckange-sur-Mess", "Ehlange", "Limpach", "Pissange", "Roedgen", "Wickrange"] },
         "Redange-sur-Attert": { th: 20, localities: ["Redange-sur-Attert", "Eltz", "Lannen", "Nagem", "Niederpallen", "Ospern", "Reichlange"] },
         "Reisdorf": { th: 20, localities: ["Reisdorf", "Bigelbach", "Hoesdorf", "Wallendorf-Pont"] },
+        
+        // CORRECTIF ICI : Valeur remise à 12 au lieu d'une valeur API erronée
         "Remich": { th: 12, localities: ["Remich"] },
+        
         "Roeser": { th: 34, localities: ["Roeser", "Berchem", "Bivange", "Crauthem", "Kockelscheuer", "Livange", "Peppange"] },
         "Rosport-Mompach": { th: 30, localities: ["Rosport", "Born", "Dickweiler", "Girst", "Girsterklaus", "Hinkel", "Mompach", "Moersdorf", "Osweiler", "Steinheim"] },
         "Rumelange": { th: 35, localities: ["Rumelange"] },
@@ -340,7 +346,9 @@
                         const clean = n.trim().toLowerCase();
                         const realKey = lookup[clean];
                         const val = parseFloat(v);
-                        if (realKey && MASTER_DATA[realKey] && !isNaN(val)) {
+                        
+                        // GARDE-FOU : On n'accepte la mise à jour que si > 0
+                        if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0) {
                             MASTER_DATA[realKey].th = val;
                             updates++;
                         }
@@ -399,7 +407,7 @@
             resultPanel.style.display = 'block';
         }
 
-        // --- SCORE CALCULATION & UI (Standard Water Score Logic) ---
+        // --- SCORE CALCULATION & UI ---
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -435,7 +443,7 @@
             drop.style.left = `${percent}%`;
         }
 
-        // --- RECOMMENDATION LOGIC (The Pitch) ---
+        // --- RECOMMENDATION LOGIC ---
         typeSelect.addEventListener('change', function() {
             const type = this.value;
             if(!type) return;
