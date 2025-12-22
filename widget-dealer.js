@@ -6,7 +6,7 @@
         containerId: 'wyws-dealer-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
         
-        // LIENS DE REDIRECTION
+        // LIENS
         linkParticulier: '/devis-particulier',
         linkCollectif: '/solutions-collectives',
         linkPro: '/solutions-professionnelles',
@@ -14,10 +14,9 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (Base V41 + Correctif Remich)
+    // 2. DONNÉES MAÎTRES (Base V41)
     // ==========================================================================
     const MASTER_DATA = {
-        // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
         "Belair-Nord": { th: 28.8, city: "Luxembourg" }, "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
         "Verlorenkost": { th: 32.0, city: "Luxembourg" }, "Cents": { th: 27.4, city: "Luxembourg" },
@@ -31,8 +30,6 @@
         "Weimershof": { th: 27.4, city: "Luxembourg" }, "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
         "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
-
-        // --- RESTE DU PAYS ---
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -103,10 +100,7 @@
         "Reckange-sur-Mess": { th: 33, localities: ["Reckange-sur-Mess", "Ehlange", "Limpach", "Pissange", "Roedgen", "Wickrange"] },
         "Redange-sur-Attert": { th: 20, localities: ["Redange-sur-Attert", "Eltz", "Lannen", "Nagem", "Niederpallen", "Ospern", "Reichlange"] },
         "Reisdorf": { th: 20, localities: ["Reisdorf", "Bigelbach", "Hoesdorf", "Wallendorf-Pont"] },
-        
-        // CORRECTIF ICI : Valeur remise à 12 au lieu d'une valeur API erronée
         "Remich": { th: 12, localities: ["Remich"] },
-        
         "Roeser": { th: 34, localities: ["Roeser", "Berchem", "Bivange", "Crauthem", "Kockelscheuer", "Livange", "Peppange"] },
         "Rosport-Mompach": { th: 30, localities: ["Rosport", "Born", "Dickweiler", "Girst", "Girsterklaus", "Hinkel", "Mompach", "Moersdorf", "Osweiler", "Steinheim"] },
         "Rumelange": { th: 35, localities: ["Rumelange"] },
@@ -140,18 +134,16 @@
     };
 
     // ==========================================================================
-    // 3. CSS ISOLÉ (Namespace .kw-dealer-)
+    // 3. CSS ISOLÉ
     // ==========================================================================
     const css = `
         #wyws-dealer-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
         
-        /* BRANDED HEADER */
         .kw-dealer-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; background: #fff; }
         .kw-dealer-headline { text-transform: uppercase; line-height: 1.1; color: #00ADEF; font-size: 2.2rem; margin: 0; font-weight: 900; }
         .kw-dealer-top-line { display: block; color: #0054A4; font-size: 0.9em; letter-spacing: 1px; }
         .kw-dealer-subtext { color: #666; margin-top: 10px; font-size: 0.95rem; }
 
-        /* SEARCH */
         .kw-dealer-search-area { padding: 0 30px 15px; position: relative; margin-top: 20px; }
         .kw-dealer-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; outline: none; text-align: center; transition: 0.3s; box-sizing: border-box; }
         .kw-dealer-input:focus { border-color: #0054A4; box-shadow: 0 0 0 3px rgba(0, 84, 164, 0.1); }
@@ -160,9 +152,9 @@
         .kw-dealer-suggestion-item:hover { background: #f0f7ff; color: #0054A4; }
         .kw-dealer-locality-hint { font-size: 0.85em; color: #888; margin-left: 8px; font-style: italic; }
 
-        /* VISUAL GAUGE & RESULT */
         .kw-dealer-result-panel { padding: 0 20px 10px; animation: kw-fadein 0.6s ease-out; }
         .kw-dealer-commune-title { font-size: 1.3rem; font-weight: bold; color: #0054A4; margin-top: 10px; }
+        
         .kw-dealer-slider-wrapper { padding: 0 20px; transition: opacity 0.3s; margin-top: 10px; }
         .kw-dealer-slider-container { position: relative; height: 60px; margin: 20px 10px; }
         .kw-dealer-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E5007E 50%, #00ADEF 100%); position: relative; top: 10px; }
@@ -173,17 +165,25 @@
         .kw-dealer-drop-value { position: absolute; top: 13px; left: 0; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .kw-dealer-labels { display: flex; justify-content: space-between; margin-top: 15px; color: #999; font-size: 11px; font-weight: bold; padding: 0 2px; }
         
-        /* VERDICT BOX */
         .kw-dealer-message-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 25px; border: 1px solid #eee; text-align: center; }
         .kw-dealer-verdict-title { font-size: 1.2em; display:block; margin-bottom:8px; font-weight: bold; }
         .kw-dealer-verdict-desc { font-size: 0.95em; color:#555; margin:0; line-height: 1.5; }
 
-        /* PROJECT SELECTOR */
         .kw-dealer-step-2 { background: #eef6fc; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid #cce4f7; text-align: left; }
         .kw-dealer-label { display: block; font-weight: bold; margin-bottom: 8px; color: #0054A4; font-size: 1.1em; }
         .kw-dealer-select { width: 100%; padding: 12px; border: 2px solid #0054A4; border-radius: 5px; font-size: 16px; background: white; cursor: pointer; color: #0054A4; font-weight: 600; }
 
-        /* RECOMMENDATION BOX */
+        /* CALCULATEUR COLLECTIF STYLES */
+        .kw-dealer-calc-form { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .kw-dealer-calc-group { display: flex; flex-direction: column; }
+        .kw-dealer-calc-label { font-size: 0.85em; color: #555; margin-bottom: 5px; font-weight: 600; }
+        .kw-dealer-calc-input { padding: 10px; border: 1px solid #ccc; border-radius: 5px; font-size: 14px; }
+        .kw-dealer-calc-btn { grid-column: span 3; background: #0054A4; color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .kw-dealer-calc-btn:hover { background: #003d7a; }
+        .kw-dealer-formula-display { background: #333; color: #eee; padding: 10px; border-radius: 5px; font-family: monospace; font-size: 0.85em; margin: 15px 0 5px; text-align: center; }
+        .kw-dealer-calc-result { margin-top: 15px; padding: 15px; background: #fff; border: 1px solid #ddd; border-radius: 5px; text-align: center; }
+        .kw-dealer-res-val { display: block; font-size: 1.2em; color: #0054A4; font-weight: bold; }
+
         .kw-dealer-rec-box { background: #fff; border: 3px solid #E5007E; border-radius: 12px; padding: 25px; margin-top: 25px; text-align: center; box-shadow: 0 6px 20px rgba(229,0,126,0.15); position: relative; overflow: hidden; }
         .kw-dealer-rec-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #E5007E; }
         .kw-dealer-rec-title { display: block; text-transform: uppercase; font-size: 0.9em; color: #E5007E; letter-spacing: 1px; margin-bottom: 10px; font-weight: 700; }
@@ -192,6 +192,11 @@
         .kw-dealer-btn { display: inline-block; background: #E5007E; color: white; text-decoration: none; padding: 14px 35px; border-radius: 50px; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(229,0,126,0.3); }
         .kw-dealer-btn:hover { background: #c4006a; transform: translateY(-2px); }
 
+        .kw-dealer-footer-block { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; margin-left: 30px; margin-right: 30px; }
+        .kw-dealer-dealer-info { font-size: 11px; color: #555; font-weight: 400; font-family: Arial, sans-serif; line-height: 1.4; display: block; }
+        .kw-dealer-dealer-link { color: #555; text-decoration: none; font-weight: 400; cursor: pointer; transition: color 0.2s; }
+        .kw-dealer-dealer-link:hover { color: #000; }
+        .kw-dealer-source-data { font-size: 9px; color: #aaa; margin-top: 10px; display: block; }
         .kw-dealer-loader { color: #888; display: none; margin: 10px; font-style: italic; }
         @keyframes kw-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     `;
@@ -251,6 +256,32 @@
                         <option value="collectif">Immeuble Collectif (Syndic)</option>
                         <option value="pro">Bureau / Commerce / Horeca</option>
                     </select>
+
+                    <div id="kw-dealer-collectif-form" style="display:none; margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">
+                        <div class="kw-dealer-formula-display">
+                            Calcul selon DIN 1988-300<br>
+                            Vs = a * (ΣVR)^b - c
+                        </div>
+                        <div class="kw-dealer-calc-form">
+                            <div class="kw-dealer-calc-group">
+                                <label class="kw-dealer-calc-label">Nb Apparts</label>
+                                <input type="number" id="kw-calc-apts" class="kw-dealer-calc-input" min="1" placeholder="Ex: 10">
+                            </div>
+                            <div class="kw-dealer-calc-group">
+                                <label class="kw-dealer-calc-label">Pers/Appt</label>
+                                <input type="number" id="kw-calc-ppl" class="kw-dealer-calc-input" value="2.5" step="0.1">
+                            </div>
+                            <div class="kw-dealer-calc-group">
+                                <label class="kw-dealer-calc-label">L/Pers/Jour</label>
+                                <input type="number" id="kw-calc-vol" class="kw-dealer-calc-input" value="100">
+                            </div>
+                            <button id="kw-calc-btn" class="kw-dealer-calc-btn">CALCULER LE DÉBIT</button>
+                        </div>
+                        <div id="kw-calc-output" class="kw-dealer-calc-result" style="display:none;">
+                            <div>Volume Journalier: <span id="kw-out-vol" class="kw-dealer-res-val">-- m3</span></div>
+                            <div style="margin-top:5px;">Débit de Pointe (DIN): <span id="kw-out-flow" class="kw-dealer-res-val" style="color:#E5007E; font-size:1.4em;">-- m3/h</span></div>
+                        </div>
+                    </div>
                 </div>
 
                 <div id="kw-dealer-rec" class="kw-dealer-rec-box" style="display:none;">
@@ -282,7 +313,7 @@
         document.head.appendChild(styleTag);
         root.innerHTML = htmlTemplate;
 
-        // Elements reference
+        // Elements
         const input = document.getElementById('kw-dealer-input');
         const suggestions = document.getElementById('kw-dealer-suggestions');
         const loader = document.getElementById('kw-dealer-loader');
@@ -293,7 +324,12 @@
         const dropShape = document.getElementById('kw-dealer-drop-shape');
         const verdictTitle = document.getElementById('kw-dealer-verdict-title');
         const verdictDesc = document.getElementById('kw-dealer-verdict-desc');
+        
         const typeSelect = document.getElementById('kw-dealer-type');
+        const formCollectif = document.getElementById('kw-dealer-collectif-form');
+        const btnCalc = document.getElementById('kw-calc-btn');
+        const outCalc = document.getElementById('kw-calc-output');
+        
         const recBox = document.getElementById('kw-dealer-rec');
         const prodName = document.getElementById('kw-dealer-prod');
         const prodDesc = document.getElementById('kw-dealer-desc');
@@ -346,8 +382,6 @@
                         const clean = n.trim().toLowerCase();
                         const realKey = lookup[clean];
                         const val = parseFloat(v);
-                        
-                        // GARDE-FOU : On n'accepte la mise à jour que si > 0
                         if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0) {
                             MASTER_DATA[realKey].th = val;
                             updates++;
@@ -393,21 +427,17 @@
             suggestions.style.display = 'block';
         });
 
-        // --- PROCESS SELECTION ---
         function processSelection(item) {
             currentTH = item.th;
             let titleText = item.displayName.includes('(') ? item.displayName : (item.isLocality ? `${item.displayName} (${item.commune})` : item.displayName);
             displayCommune.textContent = "Diagnostic pour " + titleText;
-            
             updateScoreUI(currentTH);
-            
-            // Reset flows
             typeSelect.value = "";
+            formCollectif.style.display = 'none';
             recBox.style.display = 'none';
             resultPanel.style.display = 'block';
         }
 
-        // --- SCORE CALCULATION & UI ---
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -416,7 +446,7 @@
             else if (th < 30) score = 98 - (th * 1.6);
             else score = 49 - ((th - 30) * 0.4); 
             score = Math.max(30, Math.min(100, Math.round(score)));
-            currentScore = score; // Store for later
+            currentScore = score; 
 
             const reference = 12;
             const ratio = (th > 0) ? (th / reference).toFixed(1).replace('.0', '') : 0;
@@ -443,15 +473,75 @@
             drop.style.left = `${percent}%`;
         }
 
-        // --- RECOMMENDATION LOGIC ---
+        // --- CALCULATION COLLECTIVE (DIN 1988-300) ---
+        btnCalc.addEventListener('click', function() {
+            const apts = parseFloat(document.getElementById('kw-calc-apts').value);
+            const ppl = parseFloat(document.getElementById('kw-calc-ppl').value) || 2.5;
+            const vol = parseFloat(document.getElementById('kw-calc-vol').value) || 100;
+
+            if(!apts || apts < 1) { alert("Veuillez entrer un nombre d'appartements valide."); return; }
+
+            // 1. Calcul Vol Journalier
+            const totalVolM3 = (apts * ppl * vol) / 1000;
+            document.getElementById('kw-out-vol').textContent = totalVolM3.toFixed(2) + " m3";
+
+            // 2. Calcul Débit de Pointe (DIN 1988-300 logic derived from apartment count)
+            // Note: Simplification assuming 1 Apt approx = 1 Load Unit bundle for estimation
+            let peakFlowLS;
+            if (apts <= 20) {
+                peakFlowLS = 1.48 * Math.pow(apts, 0.19) - 0.94;
+            } else {
+                peakFlowLS = 1.7 * Math.pow(apts, 0.21) - 0.7;
+            }
+            if (apts < 1) peakFlowLS = apts; // Fallback
+
+            const peakFlowM3H = peakFlowLS * 3.6;
+            document.getElementById('kw-out-flow').textContent = peakFlowM3H.toFixed(2) + " m3/h";
+            outCalc.style.display = 'block';
+
+            // 3. Selection Produit Industriel
+            let model = "";
+            let desc = `Dimensionnement basé sur DIN 1988-300 pour ${apts} appartements.`;
+            
+            if (peakFlowM3H <= 3.4) model = "Kinetico S150 XP";
+            else if (peakFlowM3H <= 4.0) model = "Kinetico S250 XP";
+            else if (peakFlowM3H <= 4.3) model = "Kinetico S350";
+            else if (peakFlowM3H <= 5.0) model = "Kinetico S550";
+            else if (peakFlowM3H <= 6.4) model = "Kinetico CP213s OD";
+            else if (peakFlowM3H <= 7.9) model = "Kinetico CP216s OD";
+            else if (peakFlowM3H <= 12.7) model = "Kinetico CP413s OD";
+            else if (peakFlowM3H <= 15.8) model = "Kinetico CP416s OD";
+            else if (peakFlowM3H <= 19.0) model = "Kinetico CP613s OD";
+            else if (peakFlowM3H <= 23.8) model = "Kinetico CP616s OD";
+            else if (peakFlowM3H <= 25.4) model = "Kinetico CP813s OD";
+            else if (peakFlowM3H <= 31.8) model = "Kinetico CP816s OD";
+            else model = "Solution Sur Mesure (Débit > 32m3/h)";
+
+            prodName.textContent = model;
+            prodDesc.innerHTML = desc;
+            linkBtn.href = CONFIG.linkCollectif;
+            recBox.style.display = 'block';
+            recBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        });
+
+        // --- TYPE SELECTION LOGIC ---
         typeSelect.addEventListener('change', function() {
             const type = this.value;
+            formCollectif.style.display = 'none';
+            outCalc.style.display = 'none';
+            recBox.style.display = 'none';
+
             if(!type) return;
 
+            if (type === 'collectif') {
+                formCollectif.style.display = 'block';
+                return; // Stop here, wait for calculation
+            }
+
+            // Logic for other types
             let name = "";
             let desc = "";
             let url = CONFIG.linkParticulier;
-            // Target Score after softner (approx 7°f TH) -> Score ~92
             const targetScore = 92; 
             const scoreGain = targetScore - currentScore;
 
@@ -461,17 +551,12 @@
             } else if (type === 'maison') {
                 name = "Kinetico Premier Plus XP";
                 desc = `<strong>Pourquoi ?</strong> La référence bi-colonne pour une protection totale d'une maison unifamiliale.`;
-            } else if (type === 'collectif') {
-                name = "Solution Collective / Syndic";
-                desc = "Étude technique sur mesure requise pour immeuble.";
-                url = CONFIG.linkCollectif;
             } else if (type === 'pro') {
                 name = "Gamme Pro / Horeca";
                 desc = "Protection spécifique des équipements professionnels.";
                 url = CONFIG.linkPro;
             }
 
-            // Add Score Impact if it's a residential project
             if (type === 'appt' || type === 'maison') {
                  desc += `<br><br><strong style="color:#E5007E; font-size:1.1em;">Impact Water Score : +${scoreGain} pts</strong>`;
                  desc += `<br>(Score final estimé avec adoucisseur : <strong>${targetScore}/100</strong>)`;
@@ -481,7 +566,6 @@
             prodName.textContent = name;
             prodDesc.innerHTML = desc;
             linkBtn.href = url;
-            
             recBox.style.display = 'block';
             recBox.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         });
