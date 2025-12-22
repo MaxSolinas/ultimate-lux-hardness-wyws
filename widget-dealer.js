@@ -16,7 +16,6 @@
     // ==========================================================================
     // 2. DONNÉES MAÎTRES (VALEURS DE SECOURS)
     // ==========================================================================
-    // Ces valeurs s'afficheront SI l'API échoue ou renvoie <= 0
     const MASTER_DATA = {
         // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
@@ -34,7 +33,7 @@
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
 
         // --- RESTE DU PAYS (Valeurs par défaut) ---
-        "Remich": { th: 12, localities: ["Remich"] }, // PROTECTION: Reste à 12 si API envoie -2
+        "Remich": { th: 12, localities: ["Remich"] },
         "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
         
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
@@ -374,10 +373,11 @@
                         const realKey = lookup[clean];
                         const val = parseFloat(v);
                         
-                        // PROTECTION STRICTE ANTI-BUG (API)
-                        // Si la valeur est <= 0.1 (ex: 0, -1, -2), on l'ignore et on garde la valeur de secours.
+                        // GARDE-FOU + REGLE DU MAX
+                        // 1. On ignore si <= 0.1 (Anti-bug API)
+                        // 2. On prend le MAX entre la valeur existante (secours/autre zone) et l'API
                         if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0.1) {
-                            MASTER_DATA[realKey].th = val;
+                            MASTER_DATA[realKey].th = Math.max(MASTER_DATA[realKey].th, val);
                             updates++;
                         }
                     }
