@@ -14,10 +14,9 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (VALEURS DE SECOURS)
+    // 2. DONNÉES MAÎTRES (Base V41)
     // ==========================================================================
     const MASTER_DATA = {
-        // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
         "Belair-Nord": { th: 28.8, city: "Luxembourg" }, "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
         "Verlorenkost": { th: 32.0, city: "Luxembourg" }, "Cents": { th: 27.4, city: "Luxembourg" },
@@ -31,11 +30,6 @@
         "Weimershof": { th: 27.4, city: "Luxembourg" }, "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
         "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
-
-        // --- RESTE DU PAYS (Valeurs par défaut) ---
-        "Remich": { th: 12, localities: ["Remich"] },
-        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
-        
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -95,6 +89,7 @@
         "Mertert": { th: 31, localities: ["Mertert", "Wasserbillig"] },
         "Mertzig": { th: 19, localities: ["Mertzig"] },
         "Mondercange": { th: 34, localities: ["Mondercange", "Bergem", "Foetz", "Pontpierre"] },
+        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
         "Niederanven": { th: 26, localities: ["Niederanven", "Ernster", "Hostert", "Oberanven", "Rameldange", "Senningen", "Senningerberg", "Waldhof"] },
         "Nommern": { th: 28, localities: ["Nommern", "Cruchten", "Schrondweiler"] },
         "Parc Hosingen": { th: 19, localities: ["Hosingen", "Bockholtz", "Consthum", "Dorscheid", "Holzthum", "Hoscheid", "Hoscheid-Dickt", "Neidhausen", "Oberschlinder", "Rodershausen", "Unterschlinder", "Wahlhausen"] },
@@ -142,10 +137,12 @@
     // ==========================================================================
     const css = `
         #wyws-dealer-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
+        
         .kw-dealer-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; background: #fff; }
         .kw-dealer-headline { text-transform: uppercase; line-height: 1.1; color: #00ADEF; font-size: 2.2rem; margin: 0; font-weight: 900; }
         .kw-dealer-top-line { display: block; color: #0054A4; font-size: 0.9em; letter-spacing: 1px; }
         .kw-dealer-subtext { color: #666; margin-top: 10px; font-size: 0.95rem; }
+
         .kw-dealer-search-area { padding: 0 30px 15px; position: relative; margin-top: 20px; }
         .kw-dealer-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; outline: none; text-align: center; transition: 0.3s; box-sizing: border-box; }
         .kw-dealer-input:focus { border-color: #0054A4; box-shadow: 0 0 0 3px rgba(0, 84, 164, 0.1); }
@@ -153,8 +150,10 @@
         .kw-dealer-suggestion-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .kw-dealer-suggestion-item:hover { background: #f0f7ff; color: #0054A4; }
         .kw-dealer-locality-hint { font-size: 0.85em; color: #888; margin-left: 8px; font-style: italic; }
+
         .kw-dealer-result-panel { padding: 0 20px 10px; animation: kw-fadein 0.6s ease-out; }
         .kw-dealer-commune-title { font-size: 1.3rem; font-weight: bold; color: #0054A4; margin-top: 10px; }
+        
         .kw-dealer-slider-wrapper { padding: 0 20px; transition: opacity 0.3s; margin-top: 10px; }
         .kw-dealer-slider-container { position: relative; height: 60px; margin: 20px 10px; }
         .kw-dealer-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E5007E 50%, #00ADEF 100%); position: relative; top: 10px; }
@@ -372,10 +371,6 @@
                         const clean = n.trim().toLowerCase();
                         const realKey = lookup[clean];
                         const val = parseFloat(v);
-                        
-                        // GARDE-FOU + REGLE DU MAX
-                        // 1. On ignore si <= 0.1 (Anti-bug API)
-                        // 2. On prend le MAX entre la valeur existante (secours/autre zone) et l'API
                         if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0.1) {
                             MASTER_DATA[realKey].th = Math.max(MASTER_DATA[realKey].th, val);
                             updates++;
