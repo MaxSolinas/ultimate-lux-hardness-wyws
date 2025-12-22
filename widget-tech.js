@@ -8,51 +8,30 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES DE RÉGLAGES (Notation Kinetico Exacte : A, A*, B...)
+    // 2. DONNÉES DE RÉGLAGES
     // ==========================================================================
-    
-    // Premier Compact XP (PCXP)
     const SETTINGS_PCXP = [
-        { max: 11, disc: "A", vol: 1420 },
-        { max: 11.5, disc: "B", vol: 1328 },
-        { max: 12.3, disc: "C", vol: 1235 },
-        { max: 13.2, disc: "D", vol: 1143 },
-        { max: 14.3, disc: "E", vol: 1051 },
-        { max: 16, disc: "F", vol: 958 },
-        { max: 17.1, disc: "G", vol: 866 },
-        { max: 19.1, disc: "H", vol: 773 },
-        { max: 21.5, disc: "I", vol: 681 },
-        { max: 23, disc: "I*", vol: 635 }, // Notation *
-        { max: 25, disc: "J", vol: 589 },
-        { max: 27, disc: "J*", vol: 543 }, // Notation *
-        { max: 29, disc: "K", vol: 496 },
-        { max: 32, disc: "K*", vol: 450 }, // Notation *
-        { max: 35, disc: "L", vol: 404 },
-        { max: 39, disc: "L*", vol: 358 }, // Notation *
-        { max: 45, disc: "M", vol: 312 },
-        { max: 52, disc: "M*", vol: 266 }  // Notation *
+        { max: 11, disc: "A", vol: 1420 }, { max: 11.5, disc: "B", vol: 1328 },
+        { max: 12.3, disc: "C", vol: 1235 }, { max: 13.2, disc: "D", vol: 1143 },
+        { max: 14.3, disc: "E", vol: 1051 }, { max: 16, disc: "F", vol: 958 },
+        { max: 17.1, disc: "G", vol: 866 }, { max: 19.1, disc: "H", vol: 773 },
+        { max: 21.5, disc: "I", vol: 681 }, { max: 23, disc: "I*", vol: 635 },
+        { max: 25, disc: "J", vol: 589 }, { max: 27, disc: "J*", vol: 543 },
+        { max: 29, disc: "K", vol: 496 }, { max: 32, disc: "K*", vol: 450 },
+        { max: 35, disc: "L", vol: 404 }, { max: 39, disc: "L*", vol: 358 },
+        { max: 45, disc: "M", vol: 312 }, { max: 52, disc: "M*", vol: 266 }
     ];
 
-    // Premier Plus XP (PPXP) - Réglage 0.56 kg
     const SETTINGS_PPXP = [
-        { max: 21, disc: "A", vol: 1583 },
-        { max: 22, disc: "B", vol: 1480 },
-        { max: 24, disc: "C", vol: 1377 },
-        { max: 26, disc: "D", vol: 1274 },
-        { max: 28, disc: "E", vol: 1171 },
-        { max: 30, disc: "F", vol: 1068 },
-        { max: 34, disc: "G", vol: 965 },
-        { max: 38, disc: "H", vol: 862 },
-        { max: 43, disc: "I", vol: 759 },
-        { max: 46, disc: "I*", vol: 708 }, // Notation *
-        { max: 49, disc: "J", vol: 656 },
-        { max: 53, disc: "J*", vol: 605 }, // Notation *
-        { max: 58, disc: "K", vol: 553 },
-        { max: 64, disc: "K*", vol: 502 }, // Notation *
-        { max: 69, disc: "L", vol: 450 },
-        { max: 77, disc: "L*", vol: 399 }, // Notation *
-        { max: 88, disc: "M", vol: 347 },
-        { max: 102, disc: "M*", vol: 224 } // Notation *
+        { max: 21, disc: "A", vol: 1583 }, { max: 22, disc: "B", vol: 1480 },
+        { max: 24, disc: "C", vol: 1377 }, { max: 26, disc: "D", vol: 1274 },
+        { max: 28, disc: "E", vol: 1171 }, { max: 30, disc: "F", vol: 1068 },
+        { max: 34, disc: "G", vol: 965 }, { max: 38, disc: "H", vol: 862 },
+        { max: 43, disc: "I", vol: 759 }, { max: 46, disc: "I*", vol: 708 },
+        { max: 49, disc: "J", vol: 656 }, { max: 53, disc: "J*", vol: 605 },
+        { max: 58, disc: "K", vol: 553 }, { max: 64, disc: "K*", vol: 502 },
+        { max: 69, disc: "L", vol: 450 }, { max: 77, disc: "L*", vol: 399 },
+        { max: 88, disc: "M", vol: 347 }, { max: 102, disc: "M*", vol: 224 }
     ];
 
     // ==========================================================================
@@ -177,90 +156,107 @@
     };
 
     // ==========================================================================
-    // 3. CSS ISOLÉ
+    // 4. CSS ISOLÉ (Design Clean Pro)
     // ==========================================================================
     const css = `
-        #wyws-tech-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 500px; margin: 20px auto; background: #222; color: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .kw-tech-header { background: #E5007E; padding: 15px; text-align: center; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        #wyws-tech-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 30px auto; background: #fff; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); overflow: hidden; color: #333; }
         
-        .kw-tech-body { padding: 20px; }
-        
-        .kw-tech-input-group { margin-bottom: 20px; position: relative; }
-        .kw-tech-label { display: block; font-size: 0.85em; color: #aaa; margin-bottom: 5px; text-transform: uppercase; }
-        .kw-tech-input, .kw-tech-select { width: 100%; padding: 12px; background: #333; border: 1px solid #444; color: #fff; border-radius: 4px; font-size: 16px; box-sizing: border-box; }
-        .kw-tech-input:focus, .kw-tech-select:focus { border-color: #E5007E; outline: none; }
+        /* HEADER */
+        .kw-tech-header { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px 20px; text-align: center; border-bottom: 1px solid #ddd; }
+        .kw-tech-title { margin: 0; font-size: 1.6rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: #0054A4; }
+        .kw-tech-subtitle { font-size: 0.95rem; color: #666; margin-top: 5px; font-weight: 500; }
+
+        /* SEARCH AREA */
+        .kw-tech-search { padding: 20px; background: #fff; position: relative; }
+        .kw-tech-label { display: block; font-size: 0.85em; color: #888; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
+        .kw-tech-input { width: 100%; padding: 15px; font-size: 17px; border: 2px solid #e1e4e8; border-radius: 8px; box-sizing: border-box; color: #333; transition: all 0.3s; }
+        .kw-tech-input:focus { border-color: #00ADEF; box-shadow: 0 0 0 3px rgba(0, 173, 239, 0.1); outline: none; }
         
         /* Suggestions */
-        .kw-tech-suggestions { position: absolute; top: 70px; left: 0; right: 0; background: #333; border: 1px solid #444; z-index: 100; max-height: 200px; overflow-y: auto; display: none; }
-        .kw-tech-item { padding: 12px; cursor: pointer; border-bottom: 1px solid #444; }
-        .kw-tech-item:hover { background: #444; }
+        .kw-tech-suggestions { position: absolute; top: 90px; left: 20px; right: 20px; background: white; border: 1px solid #ddd; z-index: 100; max-height: 250px; overflow-y: auto; display: none; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
+        .kw-tech-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
+        .kw-tech-item:hover { background: #f0f7ff; color: #0054A4; }
 
-        /* Result Box */
-        .kw-tech-result-box { background: #333; border-radius: 6px; padding: 15px; margin-top: 20px; border: 1px solid #444; display: none; }
-        .kw-tech-res-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; border-bottom: 1px solid #444; padding-bottom: 10px; }
-        .kw-tech-th-big { font-size: 2.5em; font-weight: bold; color: #00ADEF; }
-        .kw-tech-th-label { font-size: 0.9em; color: #aaa; text-align: right; }
+        /* SELECTOR AREA */
+        .kw-tech-group { padding: 0 20px 20px; }
+        .kw-tech-select { width: 100%; padding: 14px; background: #fff; border: 2px solid #e1e4e8; color: #333; border-radius: 8px; font-size: 16px; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230054A4%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
+        .kw-tech-select:focus { border-color: #00ADEF; outline: none; }
+
+        /* RESULT CARD */
+        .kw-tech-result-box { background: #fff; margin: 0 20px 25px; border-radius: 12px; border: 1px solid #e1e4e8; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; animation: slideDown 0.4s ease-out; }
         
-        .kw-tech-settings { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-        .kw-tech-setting-item { background: #222; padding: 10px; border-radius: 4px; text-align: center; }
-        .kw-tech-set-label { display: block; font-size: 0.8em; color: #888; margin-bottom: 5px; }
-        .kw-tech-set-val { display: block; font-size: 1.4em; font-weight: bold; color: #fff; }
-        .kw-tech-set-val-sm { font-size: 1em; color: #ccc; }
-
-        .kw-tech-loader { color: #888; font-style: italic; font-size: 0.8em; margin-top: 5px; display: none; }
+        .kw-tech-res-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8faff; border-bottom: 1px solid #edf2f7; }
+        .kw-tech-th-group { display: flex; flex-direction: column; }
+        .kw-tech-th-big { font-size: 3.5em; font-weight: 900; color: #00ADEF; line-height: 1; letter-spacing: -2px; }
+        .kw-tech-th-unit { font-size: 1.2em; font-weight: bold; color: #00ADEF; margin-left: 5px; }
+        .kw-tech-city { font-size: 1.1em; font-weight: 700; color: #333; text-align: right; max-width: 150px; line-height: 1.3; }
+        
+        .kw-tech-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #eee; }
+        .kw-tech-cell { padding: 20px; text-align: center; border-right: 1px solid #eee; }
+        .kw-tech-cell:last-child { border-right: none; }
+        
+        .kw-tech-data-label { display: block; font-size: 0.8em; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px; }
+        .kw-tech-data-val { display: block; font-size: 1.8em; font-weight: 900; color: #E5007E; font-family: 'Arial', sans-serif; }
+        
+        .kw-tech-loader { color: #888; font-style: italic; font-size: 0.85em; margin-top: 8px; display: none; }
+        
+        @media (max-width: 400px) { .kw-tech-th-big { font-size: 3em; } }
+        @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
     `;
 
     // ==========================================================================
-    // 4. HTML TEMPLATE
+    // 5. HTML TEMPLATE
     // ==========================================================================
     const htmlTemplate = `
         <div id="wyws-tech-widget">
-            <div class="kw-tech-header">Kinetico Tech Assist</div>
-            <div class="kw-tech-body">
+            <div class="kw-tech-header">
+                <h2 class="kw-tech-title">Technicien Kinetico</h2>
+                <div class="kw-tech-subtitle">Configuration & Réglages XP</div>
+            </div>
+
+            <div class="kw-tech-search">
+                <label class="kw-tech-label">1. Localité</label>
+                <input type="text" id="kw-tech-search" class="kw-tech-input" placeholder="Ville ou Code Postal..." autocomplete="off">
+                <div id="kw-tech-suggestions" class="kw-tech-suggestions"></div>
+                <div id="kw-tech-loader" class="kw-tech-loader">Synchronisation API...</div>
+            </div>
+
+            <div class="kw-tech-group">
+                <label class="kw-tech-label">2. Modèle Installé</label>
+                <select id="kw-tech-model" class="kw-tech-select">
+                    <option value="" disabled selected>-- Sélectionner --</option>
+                    <option value="PCXP">Premier Compact XP</option>
+                    <option value="PPXP">Premier Plus XP</option>
+                </select>
+            </div>
+
+            <div id="kw-tech-result" class="kw-tech-result-box">
+                <div class="kw-tech-res-header">
+                    <div class="kw-tech-th-group">
+                        <div>
+                            <span id="kw-disp-th" class="kw-tech-th-big">--</span>
+                            <span class="kw-tech-th-unit">°f</span>
+                        </div>
+                    </div>
+                    <div class="kw-tech-city" id="kw-disp-city">--</div>
+                </div>
                 
-                <div class="kw-tech-input-group">
-                    <label class="kw-tech-label">1. Localité / Commune</label>
-                    <input type="text" id="kw-tech-search" class="kw-tech-input" placeholder="Rechercher..." autocomplete="off">
-                    <div id="kw-tech-suggestions" class="kw-tech-suggestions"></div>
-                    <div id="kw-tech-loader" class="kw-tech-loader">Mise à jour données...</div>
-                </div>
-
-                <div class="kw-tech-input-group">
-                    <label class="kw-tech-label">2. Modèle Kinetico</label>
-                    <select id="kw-tech-model" class="kw-tech-select">
-                        <option value="" disabled selected>-- Choisir --</option>
-                        <option value="PCXP">Premier Compact XP</option>
-                        <option value="PPXP">Premier Plus XP</option>
-                    </select>
-                </div>
-
-                <div id="kw-tech-result" class="kw-tech-result-box">
-                    <div class="kw-tech-res-header">
-                        <div class="kw-tech-th-big" id="kw-disp-th">--</div>
-                        <div class="kw-tech-th-label">
-                            Dureté<br>
-                            <span id="kw-disp-city" style="color:#fff; font-weight:bold;">--</span>
-                        </div>
+                <div class="kw-tech-grid">
+                    <div class="kw-tech-cell">
+                        <span class="kw-tech-data-label">Disque</span>
+                        <span id="kw-res-disc" class="kw-tech-data-val">--</span>
                     </div>
-                    
-                    <div class="kw-tech-settings">
-                        <div class="kw-tech-setting-item">
-                            <span class="kw-tech-set-label">DISQUE / RÉGLAGE</span>
-                            <span class="kw-tech-set-val" id="kw-res-disc" style="color:#E5007E;">--</span>
-                        </div>
-                        <div class="kw-tech-setting-item">
-                            <span class="kw-tech-set-label">VOLUME (L)</span>
-                            <span class="kw-tech-set-val" id="kw-res-vol">--</span>
-                        </div>
+                    <div class="kw-tech-cell">
+                        <span class="kw-tech-data-label">Volume</span>
+                        <span id="kw-res-vol" class="kw-tech-data-val">--</span>
                     </div>
                 </div>
-
             </div>
         </div>
     `;
 
     // ==========================================================================
-    // 5. LOGIQUE
+    // 6. LOGIQUE
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -315,7 +311,6 @@
                 const geoData = await response.json();
                 if (!geoData.features) return;
                 
-                // Logic V50 Secure applied
                 const props = geoData.features[0].properties;
                 const keys = Object.keys(props);
                 const keyName = keys.find(k => k.toLowerCase().includes('commune'));
@@ -340,6 +335,7 @@
                     }
                 });
                 if(updates > 0) buildSearchIndex();
+                loader.style.display = 'none';
             } catch(e) { console.warn(e); }
         }
 
@@ -374,7 +370,7 @@
             
             // Display TH rounded
             const thRounded = Math.round(currentTH);
-            dispTH.textContent = `${thRounded}°f`;
+            dispTH.textContent = thRounded;
             dispCity.textContent = inputSearch.value;
 
             if(!model) {
@@ -391,10 +387,10 @@
             
             if(found) {
                 resDisc.textContent = found.disc;
-                resVol.textContent = found.vol;
+                resVol.textContent = found.vol + " L";
             } else {
                 resDisc.textContent = "Hors Chartes";
-                resVol.textContent = "Contactez Support";
+                resVol.textContent = "N/A";
             }
         }
 
@@ -409,7 +405,6 @@
         loadData();
     }
 
-    // Loader safe
     let attempts = 0;
     const interval = setInterval(() => {
         if(document.getElementById(CONFIG.containerId)) {
