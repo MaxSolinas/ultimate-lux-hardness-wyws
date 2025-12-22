@@ -3,22 +3,20 @@
     // 1. CONFIGURATION REVENDEUR
     // ==========================================================================
     const CONFIG = {
-        containerId: 'wyws-dealer-widget', // ID Unique pour éviter les conflits
+        containerId: 'wyws-dealer-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
         
-        // LIENS DE REDIRECTION (A personnaliser)
-        linkParticulier: '/devis-particulier',      // Lien général devis
-        linkCollectif: '/solutions-collectives',    // Lien Immeuble/Syndic
-        linkPro: '/solutions-professionnelles',     // Lien Bureau/Commerce
-        
+        // LIENS DE REDIRECTION
+        linkParticulier: '/devis-particulier',
+        linkCollectif: '/solutions-collectives',
+        linkPro: '/solutions-professionnelles',
         websiteLink: 'https://www.aquapurify.eu'
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (Base V41 - Quartiers + Pays)
+    // 2. DONNÉES MAÎTRES (Base V41 - Complète)
     // ==========================================================================
     const MASTER_DATA = {
-        // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
         "Belair-Nord": { th: 28.8, city: "Luxembourg" }, "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
         "Verlorenkost": { th: 32.0, city: "Luxembourg" }, "Cents": { th: 27.4, city: "Luxembourg" },
@@ -32,8 +30,6 @@
         "Weimershof": { th: 27.4, city: "Luxembourg" }, "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
         "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
-
-        // --- RESTE DU PAYS (Abrégé pour le chat - Le code complet V41 est inclus) ---
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -142,66 +138,108 @@
     // ==========================================================================
     const css = `
         #wyws-dealer-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
-        .kw-dealer-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; background: #f8f9fa; border-bottom: 1px solid #eee; margin-bottom: 20px; }
-        .kw-dealer-headline { text-transform: uppercase; line-height: 1.1; color: #0054A4; font-size: 1.8rem; margin: 0; font-weight: 800; }
-        .kw-dealer-subtext { color: #666; margin-top: 5px; font-size: 0.95rem; }
         
-        .kw-dealer-search-area { padding: 0 30px 15px; position: relative; }
-        .kw-dealer-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; transition: 0.3s; box-sizing: border-box; }
+        /* BRANDED HEADER */
+        .kw-dealer-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; background: #fff; }
+        .kw-dealer-headline { text-transform: uppercase; line-height: 1.1; color: #00ADEF; font-size: 2.2rem; margin: 0; font-weight: 900; }
+        .kw-dealer-top-line { display: block; color: #0054A4; font-size: 0.9em; letter-spacing: 1px; }
+        .kw-dealer-subtext { color: #666; margin-top: 10px; font-size: 0.95rem; }
+
+        /* SEARCH */
+        .kw-dealer-search-area { padding: 0 30px 15px; position: relative; margin-top: 20px; }
+        .kw-dealer-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; outline: none; text-align: center; transition: 0.3s; box-sizing: border-box; }
         .kw-dealer-input:focus { border-color: #0054A4; box-shadow: 0 0 0 3px rgba(0, 84, 164, 0.1); }
-        
         .kw-dealer-suggestions { position: absolute; top: 65px; left: 30px; right: 30px; background: white; border: 1px solid #cce4f7; z-index: 9999; max-height: 250px; overflow-y: auto; box-shadow: 0 15px 30px rgba(0,0,0,0.15); display: none; border-radius: 8px; text-align: left; }
         .kw-dealer-suggestion-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; }
         .kw-dealer-suggestion-item:hover { background: #f0f7ff; color: #0054A4; }
         .kw-dealer-locality-hint { font-size: 0.85em; color: #888; margin-left: 8px; font-style: italic; }
 
+        /* VISUAL GAUGE & RESULT */
         .kw-dealer-result-panel { padding: 0 20px 10px; animation: kw-fadein 0.6s ease-out; }
-        .kw-dealer-commune-title { font-size: 1.3rem; font-weight: bold; color: #333; margin: 10px 0; }
-        .kw-dealer-th-display { font-size: 2.5rem; font-weight: 900; color: #00ADEF; margin: 10px 0; }
-        .kw-dealer-th-unit { font-size: 1rem; color: #666; font-weight: 400; }
+        .kw-dealer-commune-title { font-size: 1.3rem; font-weight: bold; color: #0054A4; margin-top: 10px; }
+        .kw-dealer-slider-wrapper { padding: 0 20px; transition: opacity 0.3s; margin-top: 10px; }
+        .kw-dealer-slider-container { position: relative; height: 60px; margin: 20px 10px; }
+        .kw-dealer-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E5007E 50%, #00ADEF 100%); position: relative; top: 10px; }
+        .kw-dealer-grid-lines { position: absolute; top: 10px; left: 0; width: 100%; height: 40px; display: flex; justify-content: space-between; pointer-events: none; }
+        .kw-dealer-line { width: 1px; background: rgba(255,255,255,0.4); height: 100%; }
+        .kw-dealer-water-drop { position: absolute; top: -15px; transform: translateX(-50%); width: 50px; height: 65px; transition: left 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); }
+        .kw-dealer-drop-shape { width: 42px; height: 42px; background: #00ADEF; border-radius: 0 50% 50% 50%; transform: rotate(45deg); margin: 0 auto; border: 3px solid white; transition: background 1.5s; }
+        .kw-dealer-drop-value { position: absolute; top: 13px; left: 0; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
+        .kw-dealer-labels { display: flex; justify-content: space-between; margin-top: 15px; color: #999; font-size: 11px; font-weight: bold; padding: 0 2px; }
+        
+        /* VERDICT BOX */
+        .kw-dealer-message-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 25px; border: 1px solid #eee; text-align: center; }
+        .kw-dealer-verdict-title { font-size: 1.2em; display:block; margin-bottom:8px; font-weight: bold; }
+        .kw-dealer-verdict-desc { font-size: 0.95em; color:#555; margin:0; line-height: 1.5; }
 
-        .kw-dealer-step-2 { background: #f0f7ff; padding: 20px; border-radius: 8px; margin-top: 20px; border: 1px solid #cce4f7; text-align: left; }
-        .kw-dealer-label { display: block; font-weight: bold; margin-bottom: 8px; color: #0054A4; }
-        .kw-dealer-select { width: 100%; padding: 12px; border: 1px solid #0054A4; border-radius: 5px; font-size: 16px; background: white; cursor: pointer; }
+        /* PROJECT SELECTOR */
+        .kw-dealer-step-2 { background: #eef6fc; padding: 20px; border-radius: 8px; margin-top: 20px; border: 2px solid #cce4f7; text-align: left; }
+        .kw-dealer-label { display: block; font-weight: bold; margin-bottom: 8px; color: #0054A4; font-size: 1.1em; }
+        .kw-dealer-select { width: 100%; padding: 12px; border: 2px solid #0054A4; border-radius: 5px; font-size: 16px; background: white; cursor: pointer; color: #0054A4; font-weight: 600; }
 
-        .kw-dealer-rec-box { background: #fff; border: 2px solid #E5007E; border-radius: 8px; padding: 20px; margin-top: 20px; text-align: center; box-shadow: 0 4px 15px rgba(229,0,126,0.1); }
-        .kw-dealer-rec-title { display: block; text-transform: uppercase; font-size: 0.85em; color: #666; letter-spacing: 1px; margin-bottom: 5px; }
-        .kw-dealer-product-name { display: block; font-size: 1.6rem; font-weight: 900; color: #E5007E; margin-bottom: 10px; font-family: 'Arial Black', sans-serif; }
-        .kw-dealer-desc { color: #555; line-height: 1.5; font-size: 0.95em; margin-bottom: 15px; }
-        .kw-dealer-btn { display: inline-block; background: #0054A4; color: white; text-decoration: none; padding: 12px 30px; border-radius: 50px; font-weight: bold; transition: 0.3s; }
-        .kw-dealer-btn:hover { background: #003d7a; transform: translateY(-2px); }
+        /* RECOMMENDATION BOX */
+        .kw-dealer-rec-box { background: #fff; border: 3px solid #E5007E; border-radius: 12px; padding: 25px; margin-top: 25px; text-align: center; box-shadow: 0 6px 20px rgba(229,0,126,0.15); position: relative; overflow: hidden; }
+        .kw-dealer-rec-box::before { content: ''; position: absolute; top: 0; left: 0; width: 100%; height: 5px; background: #E5007E; }
+        .kw-dealer-rec-title { display: block; text-transform: uppercase; font-size: 0.9em; color: #E5007E; letter-spacing: 1px; margin-bottom: 10px; font-weight: 700; }
+        .kw-dealer-product-name { display: block; font-size: 1.8rem; font-weight: 900; color: #0054A4; margin-bottom: 15px; font-family: 'Arial Black', sans-serif; }
+        .kw-dealer-desc { color: #555; line-height: 1.5; font-size: 1em; margin-bottom: 20px; text-align: left; background: #f9f9f9; padding: 15px; border-radius: 8px; }
+        .kw-dealer-btn { display: inline-block; background: #E5007E; color: white; text-decoration: none; padding: 14px 35px; border-radius: 50px; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 4px 10px rgba(229,0,126,0.3); }
+        .kw-dealer-btn:hover { background: #c4006a; transform: translateY(-2px); }
 
-        .kw-dealer-loader { color: #888; display: none; margin: 10px; font-style: italic; font-size: 0.9em; }
+        .kw-dealer-loader { color: #888; display: none; margin: 10px; font-style: italic; }
         @keyframes kw-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     `;
 
     // ==========================================================================
-    // 3. HTML TEMPLATE
+    // 4. HTML TEMPLATE
     // ==========================================================================
     const htmlTemplate = `
         <div id="wyws-dealer-widget">
             <div class="kw-dealer-header">
-                <h2 class="kw-dealer-headline">OUTIL REVENDEUR</h2>
-                <div class="kw-dealer-subtext">Diagnostic de dureté & Recommandation Kinetico</div>
+                <h2 class="kw-dealer-headline">
+                    <span class="kw-dealer-top-line">AMÉLIOREZ LE</span>
+                    WATER SCORE DE VOS CLIENTS
+                </h2>
+                <div class="kw-dealer-subtext">Outil de diagnostic & recommandation Kinetico</div>
             </div>
 
             <div class="kw-dealer-search-area">
-                <input type="text" id="kw-dealer-input" class="kw-dealer-input" placeholder="Rechercher une localité..." autocomplete="off">
+                <input type="text" id="kw-dealer-input" class="kw-dealer-input" placeholder="Localité du client (ex: Bertrange)..." autocomplete="off">
                 <div id="kw-dealer-suggestions" class="kw-dealer-suggestions"></div>
-                <div id="kw-dealer-loader" class="kw-dealer-loader">Mise à jour des données...</div>
+                <div id="kw-dealer-loader" class="kw-dealer-loader">Initialisation...</div>
             </div>
 
             <div id="kw-dealer-result" class="kw-dealer-result-panel" style="display:none;">
                 <div id="kw-dealer-commune" class="kw-dealer-commune-title"></div>
-                <div class="kw-dealer-th-display">
-                    <span id="kw-dealer-val">--</span>
-                    <span class="kw-dealer-th-unit">°f (Dureté)</span>
+
+                <div class="kw-dealer-slider-wrapper">
+                    <div class="kw-dealer-slider-container">
+                        <div class="kw-dealer-slider-bar">
+                            <div class="kw-dealer-grid-lines">
+                                 <div class="kw-dealer-line"></div><div class="kw-dealer-line"></div><div class="kw-dealer-line"></div>
+                                 <div class="kw-dealer-line"></div><div class="kw-dealer-line"></div><div class="kw-dealer-line"></div>
+                                 <div class="kw-dealer-line"></div><div class="kw-dealer-line"></div>
+                            </div>
+                        </div>
+                        <div id="kw-dealer-drop" class="kw-dealer-water-drop" style="opacity: 0;">
+                            <div id="kw-dealer-drop-shape" class="kw-dealer-drop-shape"></div>
+                            <div id="kw-dealer-score-val" class="kw-dealer-drop-value">--</div>
+                        </div>
+                        <div class="kw-dealer-labels">
+                            <span>30</span><span>40</span><span>50</span><span>60</span><span>70</span><span>80</span><span>90</span><span>100</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="kw-dealer-message" class="kw-dealer-message-box">
+                    <strong id="kw-dealer-verdict-title" class="kw-dealer-verdict-title"></strong>
+                    <div id="kw-dealer-verdict-desc" class="kw-dealer-verdict-desc"></div>
                 </div>
 
                 <div class="kw-dealer-step-2">
-                    <label class="kw-dealer-label">Type de projet :</label>
+                    <label class="kw-dealer-label">Quel est le type de projet ?</label>
                     <select id="kw-dealer-type" class="kw-dealer-select">
-                        <option value="" disabled selected>-- Choisir --</option>
+                        <option value="" disabled selected>-- Sélectionnez --</option>
                         <option value="appt">Appartement</option>
                         <option value="maison">Maison Unifamiliale</option>
                         <option value="collectif">Immeuble Collectif (Syndic)</option>
@@ -210,34 +248,45 @@
                 </div>
 
                 <div id="kw-dealer-rec" class="kw-dealer-rec-box" style="display:none;">
-                    <span class="kw-dealer-rec-title">SOLUTION RECOMMANDÉE</span>
+                    <span class="kw-dealer-rec-title">SOLUTION RECOMMANDÉE KINETICO</span>
                     <span id="kw-dealer-prod" class="kw-dealer-product-name"></span>
                     <div id="kw-dealer-desc" class="kw-dealer-desc"></div>
                     <a href="#" id="kw-dealer-link" class="kw-dealer-btn" target="_blank">Accéder à l'offre</a>
                 </div>
             </div>
+
+             <div class="kw-dealer-footer-block">
+                <div class="kw-dealer-dealer-info">
+                    <a href="${CONFIG.websiteLink}" target="_blank" class="kw-dealer-dealer-link">Aqua Purify</a><br>
+                    Authorized, Independent Kinetico Dealer
+                </div>
+                <span class="kw-dealer-source-data">Données : data.public.lu / Administration de la gestion de l'eau</span>
+            </div>
         </div>
     `;
 
     // ==========================================================================
-    // 4. LOGIQUE JS
+    // 5. LOGIQUE JS
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
         if (!root) return;
-
         const styleTag = document.createElement('style');
         styleTag.textContent = css;
         document.head.appendChild(styleTag);
         root.innerHTML = htmlTemplate;
 
-        // Elements
+        // Elements reference
         const input = document.getElementById('kw-dealer-input');
         const suggestions = document.getElementById('kw-dealer-suggestions');
         const loader = document.getElementById('kw-dealer-loader');
         const resultPanel = document.getElementById('kw-dealer-result');
         const displayCommune = document.getElementById('kw-dealer-commune');
-        const displayVal = document.getElementById('kw-dealer-val');
+        const drop = document.getElementById('kw-dealer-drop');
+        const scoreVal = document.getElementById('kw-dealer-score-val');
+        const dropShape = document.getElementById('kw-dealer-drop-shape');
+        const verdictTitle = document.getElementById('kw-dealer-verdict-title');
+        const verdictDesc = document.getElementById('kw-dealer-verdict-desc');
         const typeSelect = document.getElementById('kw-dealer-type');
         const recBox = document.getElementById('kw-dealer-rec');
         const prodName = document.getElementById('kw-dealer-prod');
@@ -246,8 +295,9 @@
 
         let searchIndex = [];
         let currentTH = 0;
+        let currentScore = 0;
 
-        // --- DATA LOADING (Même logique robuste que V41) ---
+        // --- DATA & INDEXING ---
         function buildSearchIndex() {
             searchIndex = [];
             Object.entries(MASTER_DATA).forEach(([commune, data]) => {
@@ -275,17 +325,14 @@
                 if (!response.ok) return;
                 const geoData = await response.json();
                 if (!geoData.features) return;
-                
                 const props = geoData.features[0].properties;
                 const keys = Object.keys(props);
                 const keyName = keys.find(k => k.toLowerCase().includes('commune'));
                 const keyVal = keys.find(k => k.toLowerCase().includes('wsz') || k.toLowerCase().includes('durete'));
                 if (!keyName || !keyVal) return;
-
                 const lookup = {};
                 Object.keys(MASTER_DATA).forEach(k => lookup[k.toLowerCase().trim()] = k);
                 let updates = 0;
-
                 geoData.features.forEach(f => {
                     const n = f.properties[keyName];
                     const v = f.properties[keyVal];
@@ -304,12 +351,16 @@
             } catch (e) { console.warn(e); }
         }
 
-        // --- SEARCH ENGINE ---
+        // --- SEARCH ---
         input.addEventListener('input', (e) => {
             const val = e.target.value.toLowerCase();
             if (val.length < 2) { 
                 suggestions.style.display = 'none'; 
-                if (val.length === 0) { resultPanel.style.display = 'none'; typeSelect.value = ""; }
+                if (val.length === 0) { 
+                    resultPanel.style.display = 'none'; 
+                    drop.style.opacity = '0';
+                    typeSelect.value = ""; 
+                }
                 return; 
             }
             const matches = searchIndex.filter(i => i.searchName.includes(val)).slice(0, 10);
@@ -334,49 +385,89 @@
             suggestions.style.display = 'block';
         });
 
-        // --- SELECTION & LOGIC ---
+        // --- PROCESS SELECTION ---
         function processSelection(item) {
             currentTH = item.th;
-            displayCommune.textContent = item.displayName;
-            displayVal.textContent = currentTH.toFixed(1);
+            let titleText = item.displayName.includes('(') ? item.displayName : (item.isLocality ? `${item.displayName} (${item.commune})` : item.displayName);
+            displayCommune.textContent = "Diagnostic pour " + titleText;
             
-            // Reset Step 2
+            updateScoreUI(currentTH);
+            
+            // Reset flows
             typeSelect.value = "";
             recBox.style.display = 'none';
             resultPanel.style.display = 'block';
         }
 
-        // --- LOGIQUE METIER (RECOMMANDATION) ---
+        // --- SCORE CALCULATION & UI (Standard Water Score Logic) ---
+        function updateScoreUI(thValue) {
+            const th = parseFloat(thValue);
+            let score;
+            if (th < 5) score = 100 - (th * 2); 
+            else if (th < 15) score = 96 - (th * 1.4); 
+            else if (th < 30) score = 98 - (th * 1.6);
+            else score = 49 - ((th - 30) * 0.4); 
+            score = Math.max(30, Math.min(100, Math.round(score)));
+            currentScore = score; // Store for later
+
+            const reference = 12;
+            const ratio = (th > 0) ? (th / reference).toFixed(1).replace('.0', '') : 0;
+            let color, title, text;
+            
+            if (th < 12) {
+                color = '#00ADEF'; title = "EAU DOUCE (OK)"; text = `L'eau (${th.toFixed(1)}°f) respecte le seuil de confort (12°f). Pas de traitement nécessaire.`;
+            } else if (th < 15) {
+                color = '#00ADEF'; title = "EAU PEU CALCAIRE"; text = `L'eau (${th.toFixed(1)}°f) est légèrement au-dessus de la référence (12°f). Adoucisseur préventif utile.`;
+            } else if (th < 30) {
+                color = '#E5007E'; title = "ADOUCISSEUR RECOMMANDÉ"; text = `L'eau est calcaire (${th.toFixed(1)}°f), soit <strong>${ratio}x</strong> la référence (12°f). Protection nécessaire.`;
+            } else {
+                color = '#F57F20'; title = "ADOUCISSEUR INDISPENSABLE"; text = `L'eau est très dure (${th.toFixed(1)}°f), soit <strong>${ratio}x</strong> la référence (12°f). Protection critique.`;
+            }
+
+            verdictTitle.textContent = title;
+            verdictTitle.style.color = color;
+            verdictDesc.innerHTML = text;
+            scoreVal.textContent = score;
+            dropShape.style.background = color;
+            dropShape.style.borderColor = "white";
+            drop.style.opacity = '1';
+            const percent = ((score - 30) / 70) * 100;
+            drop.style.left = `${percent}%`;
+        }
+
+        // --- RECOMMENDATION LOGIC (The Pitch) ---
         typeSelect.addEventListener('change', function() {
             const type = this.value;
             if(!type) return;
 
             let name = "";
             let desc = "";
-            let url = CONFIG.linkParticulier; // Default fallback
+            let url = CONFIG.linkParticulier;
+            // Target Score after softner (approx 7°f TH) -> Score ~92
+            const targetScore = 92; 
+            const scoreGain = targetScore - currentScore;
 
             if (type === 'appt') {
-                if (currentTH <= 40) {
-                    name = "Kinetico Premier Compact XP";
-                    desc = `Idéal pour appartement avec dureté modérée (< 40°f).<br>Design ultra-compact, s'installe partout.`;
-                } else {
-                    name = "Kinetico Premier Plus XP";
-                    desc = `Recommandé car dureté élevée (> 40°f).<br>Volume de résine supérieur nécessaire pour protéger l'appartement.`;
-                }
-            } 
-            else if (type === 'maison') {
+                name = (currentTH <= 40) ? "Kinetico Premier Compact XP" : "Kinetico Premier Plus XP";
+                desc = `<strong>Pourquoi ?</strong> Idéal pour la dureté actuelle (${currentTH.toFixed(1)}°f) en appartement.`;
+            } else if (type === 'maison') {
                 name = "Kinetico Premier Plus XP";
-                desc = `La solution de référence pour maison unifamiliale.<br>Débit élevé, protection totale 24/24h.`;
-            } 
-            else if (type === 'collectif') {
+                desc = `<strong>Pourquoi ?</strong> La référence bi-colonne pour une protection totale d'une maison unifamiliale.`;
+            } else if (type === 'collectif') {
                 name = "Solution Collective / Syndic";
-                desc = "Dimensionnement sur mesure requis pour immeuble.";
+                desc = "Étude technique sur mesure requise pour immeuble.";
                 url = CONFIG.linkCollectif;
-            } 
-            else if (type === 'pro') {
+            } else if (type === 'pro') {
                 name = "Gamme Pro / Horeca";
-                desc = "Protection des équipements professionnels (Fours, Lave-vaisselle...).";
+                desc = "Protection spécifique des équipements professionnels.";
                 url = CONFIG.linkPro;
+            }
+
+            // Add Score Impact if it's a residential project
+            if (type === 'appt' || type === 'maison') {
+                 desc += `<br><br><strong style="color:#E5007E; font-size:1.1em;">Impact Water Score : +${scoreGain} pts</strong>`;
+                 desc += `<br>(Score final estimé avec adoucisseur : <strong>${targetScore}/100</strong>)`;
+                 desc += `<br><span style="font-size:0.9em; color:#555;">💡 Avec osmoseur K5 en complément : Score <strong>99/100</strong>.</span>`;
             }
 
             prodName.textContent = name;
@@ -392,7 +483,6 @@
                 suggestions.style.display = 'none';
             }
         });
-
         loadData();
     }
 
