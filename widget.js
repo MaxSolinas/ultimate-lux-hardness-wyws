@@ -5,15 +5,43 @@
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
-        vdlLink: 'https://www.vdl.lu/fr/vivre/domicile-au-quotidien/verifier-la-qualite-de-leau-chez-soi#',
         quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis',
         websiteLink: 'https://www.aquapurify.eu'
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (Structure Parent/Enfants)
+    // 2. DONNÉES MAÎTRES
     // ==========================================================================
     const MASTER_DATA = {
+        // --- QUARTIERS VDL ---
+        "Beggen": { th: 27.9, city: "Luxembourg" },
+        "Belair": { th: 28.8, city: "Luxembourg" },
+        "Belair-Nord": { th: 28.8, city: "Luxembourg" },
+        "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
+        "Verlorenkost": { th: 32.0, city: "Luxembourg" },
+        "Cents": { th: 27.4, city: "Luxembourg" },
+        "Cessange": { th: 28.8, city: "Luxembourg" },
+        "Clausen": { th: 27.9, city: "Luxembourg" },
+        "Dommeldange": { th: 27.9, city: "Luxembourg" },
+        "Eich": { th: 26.3, city: "Luxembourg" },
+        "Gare": { th: 32.0, city: "Luxembourg" },
+        "Gasperich": { th: 23.1, city: "Luxembourg" },
+        "Grund": { th: 27.4, city: "Luxembourg" },
+        "Hamm": { th: 27.4, city: "Luxembourg" },
+        "Hollerich": { th: 31.9, city: "Luxembourg" },
+        "Kirchberg": { th: 27.4, city: "Luxembourg" },
+        "Limpertsberg": { th: 26.3, city: "Luxembourg" },
+        "Merl": { th: 31.9, city: "Luxembourg" },
+        "Muhlenbach": { th: 26.3, city: "Luxembourg" },
+        "Neudorf": { th: 27.4, city: "Luxembourg" },
+        "Weimershof": { th: 27.4, city: "Luxembourg" },
+        "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
+        "Pulvermuhl": { th: 32.0, city: "Luxembourg" },
+        "Rollingergrund": { th: 28.8, city: "Luxembourg" },
+        "Ville-Haute": { th: 28.8, city: "Luxembourg" },
+        "Weimerskirch": { th: 27.4, city: "Luxembourg" },
+
+        // --- RESTE DU PAYS ---
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -67,7 +95,6 @@
         "Leudelange": { th: 32, localities: ["Leudelange"] },
         "Lintgen": { th: 20, localities: ["Lintgen", "Gosseldange", "Prettingen"] },
         "Lorentzweiler": { th: 20, localities: ["Lorentzweiler", "Blaschette", "Bofferdange", "Helmdange", "Hunsdorf"] },
-        "Luxembourg": { th: -1, localities: ["Luxembourg", "Beggen", "Belair", "Bonnevoie", "Cessange", "Clausen", "Dommeldange", "Eich", "Gare", "Gasperich", "Grund", "Hamm", "Hollerich", "Kirchberg", "Limpertsberg", "Merl", "Muhlenbach", "Neudorf", "Pfaffenthal", "Rollingergrund", "Weimerskirch"] },
         "Mamer": { th: 32, localities: ["Mamer", "Capellen", "Holzem"] },
         "Manternach": { th: 30, localities: ["Manternach", "Berbourg", "Lellig", "Munschecker"] },
         "Mersch": { th: 21, localities: ["Mersch", "Beringen", "Berschbach", "Moesdorf", "Pettingen", "Reckange", "Rollingen", "Schoenfels"] },
@@ -179,7 +206,7 @@
             </div>
 
             <div class="kw-lux-search-area">
-                <input type="text" id="kw-input-lux" class="kw-lux-input" placeholder="Ex: Bertrange, Capellen..." autocomplete="off">
+                <input type="text" id="kw-input-lux" class="kw-lux-input" placeholder="Ex: Beggen, Bertrange..." autocomplete="off">
                 <div id="kw-suggestions-lux" class="kw-lux-suggestions"></div>
                 <div id="kw-loader-lux" class="kw-lux-loader">Initialisation...</div>
             </div>
@@ -210,11 +237,6 @@
                     <strong id="kw-verdict-title-lux" style="font-size: 1.2em; display:block; margin-bottom:8px;"></strong>
                     <div id="kw-verdict-desc-lux" style="font-size: 0.95em; color:#555; margin:0; line-height: 1.5;"></div>
                     <a href="${CONFIG.quoteLink}" id="kw-cta-btn-lux" class="kw-lux-cta-button">AMÉLIOREZ VOTRE WATER SCORE AUJOURD'HUI !</a>
-                </div>
-
-                <div id="kw-vdl-container-lux" style="display:none; text-align: center; margin-top:20px;">
-                    <p style="color:#666;">La Ville de Luxembourg possède un réseau complexe avec plusieurs sources d'eau différentes.</p>
-                    <a href="${CONFIG.vdlLink}" target="_blank" class="kw-lux-redirect-btn">Vérifier mon adresse précise sur vdl.lu</a>
                 </div>
             </div>
 
@@ -247,7 +269,6 @@
         const resultPanel = document.getElementById('kw-result-lux');
         const sliderWrapper = document.getElementById('kw-slider-wrapper-lux');
         const messageStandard = document.getElementById('kw-message-standard-lux');
-        const vdlContainer = document.getElementById('kw-vdl-container-lux');
         const displayCommune = document.getElementById('kw-commune-display-lux');
         const drop = document.getElementById('kw-drop-lux');
         const scoreVal = document.getElementById('kw-score-val-lux');
@@ -258,54 +279,72 @@
 
         let searchIndex = [];
 
-        // CONSTRUIRE L'INDEX DE RECHERCHE (Communes + Localités)
+        // CONSTRUIRE L'INDEX DE RECHERCHE
         function buildSearchIndex() {
             searchIndex = [];
             Object.entries(MASTER_DATA).forEach(([commune, data]) => {
-                // Ajouter la commune principale
-                searchIndex.push({
-                    displayName: commune,
-                    searchName: commune.toLowerCase(),
-                    commune: commune, // Parent
-                    th: data.th,
-                    isLocality: false
-                });
-                
-                // Ajouter ses localités enfants (Si elles existent)
-                if (data.localities && Array.isArray(data.localities)) {
-                    data.localities.forEach(locality => {
-                        // On évite d'ajouter la commune si elle est aussi dans la liste des localités
-                        if (locality.toLowerCase() !== commune.toLowerCase()) {
-                            searchIndex.push({
-                                displayName: locality,
-                                searchName: locality.toLowerCase(),
-                                commune: commune, // Le parent pour la référence TH
-                                th: data.th,      // Hérite du TH du parent
-                                isLocality: true
-                            });
-                        }
+                // Pour les quartiers de VDL
+                if (data.city === "Luxembourg") {
+                    // Entrée 1 : "Beggen (Luxembourg)"
+                    searchIndex.push({
+                        displayName: `${commune} (Luxembourg)`,
+                        searchName: `${commune.toLowerCase()} luxembourg`,
+                        commune: commune,
+                        th: data.th,
+                        isLocality: true
                     });
+                    
+                    // Entrée 2 : "Luxembourg (Beggen)"
+                    searchIndex.push({
+                        displayName: `Luxembourg (${commune})`,
+                        searchName: `luxembourg ${commune.toLowerCase()}`,
+                        commune: commune,
+                        th: data.th,
+                        isLocality: true
+                    });
+                } else {
+                    // Pour les communes standards
+                    searchIndex.push({
+                        displayName: commune,
+                        searchName: commune.toLowerCase(),
+                        commune: commune,
+                        th: data.th,
+                        isLocality: false
+                    });
+
+                    // Ajouter les localités enfants
+                    if (data.localities && Array.isArray(data.localities)) {
+                        data.localities.forEach(locality => {
+                            if (locality.toLowerCase() !== commune.toLowerCase()) {
+                                searchIndex.push({
+                                    displayName: locality,
+                                    searchName: locality.toLowerCase(),
+                                    commune: commune,
+                                    th: data.th,
+                                    isLocality: true
+                                });
+                            }
+                        });
+                    }
                 }
             });
-            // Trier alphabétiquement pour l'affichage
+            // Trier alphabétiquement
             searchIndex.sort((a, b) => a.displayName.localeCompare(b.displayName, 'fr'));
         }
 
-        // CHARGEMENT API AVEC MERGE INTELLIGENT
+        // CHARGEMENT API
         async function loadData() {
-            // 1. D'abord on prépare les données fixes (Plan B immédiat)
+            // Plan B immédiat
             buildSearchIndex();
             loader.style.display = 'none';
 
             try {
-                // 2. On tente de mettre à jour via l'API
                 const response = await fetch(CONFIG.apiUrl);
-                if (!response.ok) return; // Si échec, on garde le Plan B silencieusement
+                if (!response.ok) return; 
                 
                 const geoData = await response.json();
                 if (!geoData.features || geoData.features.length === 0) return;
 
-                // Scanner les colonnes pour trouver les bons champs
                 const props = geoData.features[0].properties;
                 const keys = Object.keys(props);
                 const keyName = keys.find(k => k.toLowerCase().includes('commune'));
@@ -313,8 +352,6 @@
 
                 if (!keyName || !keyVal) return;
 
-                // Création d'un dico de correspondance (Case Insensitive)
-                // Ex: "beaufort" -> "Beaufort" (Clé réelle dans MASTER_DATA)
                 const lookup = {};
                 Object.keys(MASTER_DATA).forEach(k => {
                     lookup[k.toLowerCase().trim()] = k;
@@ -322,29 +359,25 @@
 
                 let updatesCount = 0;
 
-                // 3. Mise à jour des valeurs
                 geoData.features.forEach(feature => {
                     const nameApi = feature.properties[keyName];
                     const thApi = feature.properties[keyVal];
                     
                     if (nameApi && typeof nameApi === 'string') {
-                        const cleanName = nameApi.trim().toLowerCase(); // On normalise
+                        const cleanName = nameApi.trim().toLowerCase();
                         const newVal = parseFloat(thApi);
                         
-                        // Si on trouve cette commune dans notre dico
                         const realKey = lookup[cleanName];
                         
                         if (realKey && MASTER_DATA[realKey] && !isNaN(newVal)) {
-                            // On met à jour la valeur du PARENT
                             MASTER_DATA[realKey].th = newVal;
                             updatesCount++;
                         }
                     }
                 });
 
-                // 4. Si on a mis à jour des trucs, on reconstruit l'index pour que les localités héritent !
                 if (updatesCount > 0) {
-                    console.log('Widget: Mise à jour API réussie pour ' + updatesCount + ' communes.');
+                    console.log('Widget: Mise à jour API réussie pour ' + updatesCount + ' entrées.');
                     buildSearchIndex();
                 }
 
@@ -377,8 +410,8 @@
                 const div = document.createElement('div');
                 div.className = 'kw-lux-suggestion-item';
                 
-                if (item.isLocality) {
-                    div.innerHTML = `${item.displayName} <span class="kw-lux-locality-hint">(${item.commune})</span>`;
+                if (item.isLocality && !item.displayName.includes('(')) {
+                     div.innerHTML = `${item.displayName} <span class="kw-lux-locality-hint">(${item.commune})</span>`;
                 } else {
                     div.textContent = item.displayName;
                 }
@@ -393,29 +426,23 @@
             suggestions.style.display = 'block';
         });
 
-        // SÉLECTION ET AFFICHAGE
+        // SÉLECTION
         function processSelection(item) {
-            const communeName = item.commune;
-            const displayText = item.isLocality 
-                ? `Qualité de l'eau à ${item.displayName} (${communeName})`
-                : `Qualité de l'eau à ${communeName}`;
-            
-            displayCommune.textContent = displayText;
-            resultPanel.style.display = 'block';
-            
-            if (item.th === -1) {
-                sliderWrapper.style.display = 'none';
-                messageStandard.style.display = 'none';
-                vdlContainer.style.display = 'block';
-            } else {
-                vdlContainer.style.display = 'none';
-                sliderWrapper.style.display = 'block';
-                messageStandard.style.display = 'block';
-                updateScoreUI(item.th);
+            let titleText = `Qualité de l'eau à ${item.displayName}`;
+            if(item.displayName.includes('(')) {
+                 titleText = `Qualité de l'eau à ${item.displayName}`;
+            } else if (item.isLocality) {
+                 titleText = `Qualité de l'eau à ${item.displayName} (${item.commune})`;
             }
+
+            displayCommune.textContent = titleText;
+            resultPanel.style.display = 'block';
+            sliderWrapper.style.display = 'block';
+            messageStandard.style.display = 'block';
+            updateScoreUI(item.th);
         }
 
-        // CALCUL DU SCORE (Ratio 12°f)
+        // SCORE
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
