@@ -6,7 +6,7 @@
         containerId: 'wyws-dealer-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
         
-        // LIENS DE REDIRECTION
+        // LIENS
         linkParticulier: '/devis-particulier',
         linkCollectif: '/solutions-collectives',
         linkPro: '/solutions-professionnelles',
@@ -14,8 +14,9 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES (Valeurs de secours certifiées)
+    // 2. DONNÉES MAÎTRES (VALEURS DE SECOURS)
     // ==========================================================================
+    // Ces valeurs s'afficheront SI l'API échoue ou renvoie <= 0
     const MASTER_DATA = {
         // --- QUARTIERS VDL ---
         "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
@@ -32,9 +33,9 @@
         "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
 
-        // --- RESTE DU PAYS (Valeurs Fallback si API = -2) ---
-        "Remich": { th: 12, localities: ["Remich"] }, // Sera utilisé car API = -2
-        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] }, // Sera utilisé si API = -2
+        // --- RESTE DU PAYS (Valeurs par défaut) ---
+        "Remich": { th: 12, localities: ["Remich"] }, // PROTECTION: Reste à 12 si API envoie -2
+        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
         
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
@@ -372,8 +373,10 @@
                         const clean = n.trim().toLowerCase();
                         const realKey = lookup[clean];
                         const val = parseFloat(v);
-                        // GARDE-FOU STRICT : On ignore toute valeur négative ou nulle venant de l'API
-                        if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0) {
+                        
+                        // PROTECTION STRICTE ANTI-BUG (API)
+                        // Si la valeur est <= 0.1 (ex: 0, -1, -2), on l'ignore et on garde la valeur de secours.
+                        if (realKey && MASTER_DATA[realKey] && !isNaN(val) && val > 0.1) {
                             MASTER_DATA[realKey].th = val;
                             updates++;
                         }
