@@ -8,8 +8,9 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES DE RÉGLAGES
+    // 2. DONNÉES DE RÉGLAGES (Chartes Officielles)
     // ==========================================================================
+    const SALT_PCXP = 0.34; // kg par régénération
     const SETTINGS_PCXP = [
         { max: 11, disc: "A", vol: 1420 }, { max: 11.5, disc: "B", vol: 1328 },
         { max: 12.3, disc: "C", vol: 1235 }, { max: 13.2, disc: "D", vol: 1143 },
@@ -22,6 +23,7 @@
         { max: 45, disc: "M", vol: 312 }, { max: 52, disc: "M*", vol: 266 }
     ];
 
+    const SALT_PPXP = 0.56; // kg par régénération
     const SETTINGS_PPXP = [
         { max: 21, disc: "A", vol: 1583 }, { max: 22, disc: "B", vol: 1480 },
         { max: 24, disc: "C", vol: 1377 }, { max: 26, disc: "D", vol: 1274 },
@@ -112,7 +114,6 @@
         "Mertert": { th: 31, localities: ["Mertert", "Wasserbillig"] },
         "Mertzig": { th: 19, localities: ["Mertzig"] },
         "Mondercange": { th: 34, localities: ["Mondercange", "Bergem", "Foetz", "Pontpierre"] },
-        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
         "Niederanven": { th: 26, localities: ["Niederanven", "Ernster", "Hostert", "Oberanven", "Rameldange", "Senningen", "Senningerberg", "Waldhof"] },
         "Nommern": { th: 28, localities: ["Nommern", "Cruchten", "Schrondweiler"] },
         "Parc Hosingen": { th: 19, localities: ["Hosingen", "Bockholtz", "Consthum", "Dorscheid", "Holzthum", "Hoscheid", "Hoscheid-Dickt", "Neidhausen", "Oberschlinder", "Rodershausen", "Unterschlinder", "Wahlhausen"] },
@@ -156,62 +157,53 @@
     };
 
     // ==========================================================================
-    // 4. CSS ISOLÉ (Design Clean Pro)
+    // 3. CSS ISOLÉ (Design Clean Pro)
     // ==========================================================================
     const css = `
         #wyws-tech-widget { font-family: 'Segoe UI', Arial, sans-serif; max-width: 600px; margin: 30px auto; background: #fff; border: 1px solid #ddd; border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.08); overflow: hidden; color: #333; }
-        
-        /* HEADER */
         .kw-tech-header { background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 25px 20px; text-align: center; border-bottom: 1px solid #ddd; }
         .kw-tech-title { margin: 0; font-size: 1.6rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; color: #0054A4; }
         .kw-tech-subtitle { font-size: 0.95rem; color: #666; margin-top: 5px; font-weight: 500; }
-
-        /* SEARCH AREA */
         .kw-tech-search { padding: 20px; background: #fff; position: relative; }
         .kw-tech-label { display: block; font-size: 0.85em; color: #888; text-transform: uppercase; font-weight: 700; margin-bottom: 8px; letter-spacing: 0.5px; }
         .kw-tech-input { width: 100%; padding: 15px; font-size: 17px; border: 2px solid #e1e4e8; border-radius: 8px; box-sizing: border-box; color: #333; transition: all 0.3s; }
         .kw-tech-input:focus { border-color: #00ADEF; box-shadow: 0 0 0 3px rgba(0, 173, 239, 0.1); outline: none; }
-        
-        /* Suggestions */
         .kw-tech-suggestions { position: absolute; top: 90px; left: 20px; right: 20px; background: white; border: 1px solid #ddd; z-index: 100; max-height: 250px; overflow-y: auto; display: none; border-radius: 8px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); }
         .kw-tech-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; font-size: 15px; }
         .kw-tech-item:hover { background: #f0f7ff; color: #0054A4; }
-
-        /* SELECTOR AREA */
-        .kw-tech-group { padding: 0 20px 20px; }
+        .kw-tech-group { padding: 0 20px 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .kw-tech-select { width: 100%; padding: 14px; background: #fff; border: 2px solid #e1e4e8; color: #333; border-radius: 8px; font-size: 16px; cursor: pointer; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%230054A4%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E"); background-repeat: no-repeat; background-position: right 15px top 50%; background-size: 12px auto; }
         .kw-tech-select:focus { border-color: #00ADEF; outline: none; }
-
-        /* RESULT CARD */
         .kw-tech-result-box { background: #fff; margin: 0 20px 25px; border-radius: 12px; border: 1px solid #e1e4e8; display: none; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden; animation: slideDown 0.4s ease-out; }
-        
         .kw-tech-res-header { display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #f8faff; border-bottom: 1px solid #edf2f7; }
         .kw-tech-th-group { display: flex; flex-direction: column; }
         .kw-tech-th-big { font-size: 3.5em; font-weight: 900; color: #00ADEF; line-height: 1; letter-spacing: -2px; }
         .kw-tech-th-unit { font-size: 1.2em; font-weight: bold; color: #00ADEF; margin-left: 5px; }
         .kw-tech-city { font-size: 1.1em; font-weight: 700; color: #333; text-align: right; max-width: 150px; line-height: 1.3; }
-        
         .kw-tech-grid { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid #eee; }
-        .kw-tech-cell { padding: 20px; text-align: center; border-right: 1px solid #eee; }
+        .kw-tech-cell { padding: 20px; text-align: center; border-right: 1px solid #eee; border-bottom: 1px solid #eee; }
         .kw-tech-cell:last-child { border-right: none; }
-        
         .kw-tech-data-label { display: block; font-size: 0.8em; color: #888; text-transform: uppercase; font-weight: bold; letter-spacing: 1px; margin-bottom: 8px; }
         .kw-tech-data-val { display: block; font-size: 1.8em; font-weight: 900; color: #E5007E; font-family: 'Arial', sans-serif; }
-        
+        .kw-tech-salt-section { grid-column: span 2; background: #fff5f9; padding: 20px; border-top: 1px solid #eee; }
+        .kw-tech-salt-title { display: block; font-weight: bold; color: #E5007E; margin-bottom: 10px; text-transform: uppercase; font-size: 0.9em; }
+        .kw-tech-salt-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+        .kw-tech-salt-item { background: #fff; padding: 10px; border-radius: 6px; border: 1px solid #ffd1e1; text-align: center; }
+        .kw-tech-salt-val { font-weight: 900; color: #333; font-size: 1.2em; }
+        .kw-tech-salt-sub { font-size: 0.8em; color: #666; display: block; }
         .kw-tech-loader { color: #888; font-style: italic; font-size: 0.85em; margin-top: 8px; display: none; }
-        
-        @media (max-width: 400px) { .kw-tech-th-big { font-size: 3em; } }
+        @media (max-width: 450px) { .kw-tech-group { grid-template-columns: 1fr; } .kw-tech-th-big { font-size: 3em; } }
         @keyframes slideDown { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
     `;
 
     // ==========================================================================
-    // 5. HTML TEMPLATE
+    // 4. HTML TEMPLATE
     // ==========================================================================
     const htmlTemplate = `
         <div id="wyws-tech-widget">
             <div class="kw-tech-header">
                 <h2 class="kw-tech-title">Technicien Kinetico</h2>
-                <div class="kw-tech-subtitle">Configuration & Réglages XP</div>
+                <div class="kw-tech-subtitle">Configuration, Réglages & Conso Sel</div>
             </div>
 
             <div class="kw-tech-search">
@@ -222,12 +214,25 @@
             </div>
 
             <div class="kw-tech-group">
-                <label class="kw-tech-label">2. Modèle Installé</label>
-                <select id="kw-tech-model" class="kw-tech-select">
-                    <option value="" disabled selected>-- Sélectionner --</option>
-                    <option value="PCXP">Premier Compact XP</option>
-                    <option value="PPXP">Premier Plus XP</option>
-                </select>
+                <div>
+                    <label class="kw-tech-label">2. Modèle</label>
+                    <select id="kw-tech-model" class="kw-tech-select">
+                        <option value="" disabled selected>-- Choix --</option>
+                        <option value="PCXP">Premier Compact</option>
+                        <option value="PPXP">Premier Plus</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="kw-tech-label">3. Résidents</label>
+                    <select id="kw-tech-ppl" class="kw-tech-select">
+                        <option value="1">1 pers.</option>
+                        <option value="2">2 pers.</option>
+                        <option value="3" selected>3 pers.</option>
+                        <option value="4">4 pers.</option>
+                        <option value="5">5 pers.</option>
+                        <option value="6">6 pers.</option>
+                    </select>
+                </div>
             </div>
 
             <div id="kw-tech-result" class="kw-tech-result-box">
@@ -237,18 +242,35 @@
                             <span id="kw-disp-th" class="kw-tech-th-big">--</span>
                             <span class="kw-tech-th-unit">°f</span>
                         </div>
+                        <div style="font-size:0.8em; color:#888;">(Compensé -8°f)</div>
                     </div>
                     <div class="kw-tech-city" id="kw-disp-city">--</div>
                 </div>
                 
                 <div class="kw-tech-grid">
                     <div class="kw-tech-cell">
-                        <span class="kw-tech-data-label">Disque</span>
+                        <span class="kw-tech-data-label">Réglage Disque</span>
                         <span id="kw-res-disc" class="kw-tech-data-val">--</span>
+                        <span style="font-size:0.7em; color:#888; display:block; margin-top:4px;">(Sur TH Brut)</span>
                     </div>
                     <div class="kw-tech-cell">
-                        <span class="kw-tech-data-label">Volume</span>
+                        <span class="kw-tech-data-label">Volume Ajusté</span>
                         <span id="kw-res-vol" class="kw-tech-data-val">--</span>
+                        <span style="font-size:0.7em; color:#888; display:block; margin-top:4px;">(Ratio +25/30%)</span>
+                    </div>
+                    
+                    <div class="kw-tech-salt-section">
+                        <span class="kw-tech-salt-title">Estimation Conso. Sel</span>
+                        <div class="kw-tech-salt-grid">
+                            <div class="kw-tech-salt-item">
+                                <span class="kw-tech-salt-val" id="kw-salt-month">-- kg</span>
+                                <span class="kw-tech-salt-sub">/ mois</span>
+                            </div>
+                            <div class="kw-tech-salt-item">
+                                <span class="kw-tech-salt-val" id="kw-salt-year">-- kg</span>
+                                <span class="kw-tech-salt-sub">/ an</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -256,7 +278,7 @@
     `;
 
     // ==========================================================================
-    // 6. LOGIQUE
+    // 5. LOGIQUE
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -272,12 +294,16 @@
         const suggestions = document.getElementById('kw-tech-suggestions');
         const loader = document.getElementById('kw-tech-loader');
         const inputModel = document.getElementById('kw-tech-model');
+        const inputPpl = document.getElementById('kw-tech-ppl');
         const resultBox = document.getElementById('kw-tech-result');
         
         const dispTH = document.getElementById('kw-disp-th');
         const dispCity = document.getElementById('kw-disp-city');
         const resDisc = document.getElementById('kw-res-disc');
         const resVol = document.getElementById('kw-res-vol');
+        
+        const saltMonth = document.getElementById('kw-salt-month');
+        const saltYear = document.getElementById('kw-salt-year');
 
         let searchIndex = [];
         let currentTH = 0;
@@ -366,28 +392,54 @@
             if(!currentTH) { resultBox.style.display = 'none'; return; }
             
             const model = inputModel.value;
+            const ppl = parseInt(inputPpl.value);
+            
             resultBox.style.display = 'block';
             
-            // Display TH rounded
-            const thRounded = Math.round(currentTH);
-            dispTH.textContent = thRounded;
+            // 1. Dureté BRUTE pour l'affichage et le Disque
+            const thRaw = Math.round(currentTH);
+            
+            dispTH.textContent = thRaw;
             dispCity.textContent = inputSearch.value;
 
             if(!model) {
                 resDisc.textContent = "--";
                 resVol.textContent = "--";
+                saltMonth.textContent = "--";
+                saltYear.textContent = "--";
                 return;
             }
 
-            // FIND SETTING
+            // FIND SETTING (Sur TH Brut)
             const settingsArray = (model === 'PCXP') ? SETTINGS_PCXP : SETTINGS_PPXP;
+            const saltPerRegen = (model === 'PCXP') ? SALT_PCXP : SALT_PPXP;
             
-            // Find first setting where thRounded <= max
-            const found = settingsArray.find(s => thRounded <= s.max);
+            const foundSetting = settingsArray.find(s => thRaw <= s.max);
             
-            if(found) {
-                resDisc.textContent = found.disc;
-                resVol.textContent = found.vol + " L";
+            if(foundSetting) {
+                // A. Disque (Réglage Sécurité)
+                resDisc.textContent = foundSetting.disc;
+                
+                // B. Calcul du Volume Ajusté (Formule Client : VolBase * (1 + 8/TH))
+                const volBase = foundSetting.vol;
+                const ratioResidual = 8 / thRaw; // ex: 8/32 = 0.25
+                const volAdjusted = Math.round(volBase * (1 + ratioResidual)); // ex: 605 * 1.25 = 756
+                
+                // Affichage du volume ajusté
+                resVol.textContent = volAdjusted + " L";
+
+                // C. Calcul Conso Sel (Basé sur le volume ajusté)
+                const dailyWater = ppl * 100; // 100L / pers
+                
+                // Nombre de régénérations par an
+                const regensPerYear = (dailyWater * 365) / volAdjusted;
+                
+                const saltAnnual = regensPerYear * saltPerRegen;
+                const saltMonthly = saltAnnual / 12;
+
+                saltYear.textContent = saltAnnual.toFixed(1) + " kg";
+                saltMonth.textContent = saltMonthly.toFixed(1) + " kg";
+
             } else {
                 resDisc.textContent = "Hors Chartes";
                 resVol.textContent = "N/A";
@@ -395,6 +447,7 @@
         }
 
         inputModel.addEventListener('change', updateResult);
+        inputPpl.addEventListener('change', updateResult);
 
         document.addEventListener('click', (e) => {
             if(inputSearch && !inputSearch.contains(e.target) && !suggestions.contains(e.target)) {
