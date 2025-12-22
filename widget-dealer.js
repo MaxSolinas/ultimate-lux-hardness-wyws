@@ -505,8 +505,8 @@
             
             if (peakFlowM3H <= 3.4) model = "Kinetico S150 XP";
             else if (peakFlowM3H <= 4.0) model = "Kinetico S250 XP";
-            else if (peakFlowM3H <= 4.3) model = "Kinetico S350";
-            else if (peakFlowM3H <= 5.0) model = "Kinetico S550";
+            else if (peakFlowM3H <= 4.3) model = "Kinetico S350 XP";
+            else if (peakFlowM3H <= 5.0) model = "Kinetico S550 XP";
             else if (peakFlowM3H <= 6.4) model = "Kinetico CP213s OD";
             else if (peakFlowM3H <= 7.9) model = "Kinetico CP216s OD";
             else if (peakFlowM3H <= 12.7) model = "Kinetico CP413s OD";
