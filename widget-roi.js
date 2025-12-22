@@ -3,7 +3,7 @@
     // 1. CONFIGURATION (WIDGET ROI)
     // ==========================================================================
     const CONFIG = {
-        containerId: 'wyws-luxembourg-widget', // On garde le même ID conteneur pour compatibilité
+        containerId: 'wyws-luxembourg-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
         quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis',
         websiteLink: 'https://www.aquapurify.eu'
@@ -188,6 +188,7 @@
         .kw-sim-val { font-weight: 800; color: #333; }
         .kw-sim-desc { font-size: 0.75em; color: #777; display: block; }
         .kw-sim-plastic-badge { grid-column: span 2; background: #e8f5e9; color: #2e7d32; padding: 8px; border-radius: 20px; font-weight: bold; font-size: 0.85em; text-align: center; margin-top: 10px; }
+        .kw-sim-aggravator { grid-column: span 2; background: #fff3cd; color: #856404; padding: 10px; font-size:0.8em; text-align:center; border-radius:6px; font-weight:bold; margin-bottom:15px; border:1px solid #ffeeba; }
         
         @keyframes kw-fadein { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     `;
@@ -263,6 +264,8 @@
                         </div>
                     </div>
 
+                    <div id="kw-sim-alert" class="kw-sim-aggravator" style="display:none;"></div>
+
                     <div class="kw-sim-result-total">
                         <span class="kw-sim-total-val" id="kw-sim-total">-- €</span>
                         <span class="kw-sim-total-sub">Perdus chaque année</span>
@@ -334,6 +337,7 @@
         const ctaBtn = document.getElementById('kw-cta-btn-lux');
         const btnSim = document.getElementById('kw-btn-sim');
         const simContainer = document.getElementById('kw-sim-container');
+        const simAlert = document.getElementById('kw-sim-alert');
         const dropShape = drop.querySelector('.kw-lux-drop-shape');
 
         // Simulator Elements
@@ -347,6 +351,7 @@
         const outPlastic = document.getElementById('kw-sim-plastic');
 
         let searchIndex = [];
+        let currentTH = 0; // Stocker le TH globalement
 
         // CONSTRUIRE L'INDEX
         function buildSearchIndex() {
@@ -441,10 +446,11 @@
         function processSelection(item) {
             let titleText = item.displayName.includes('(') ? `Qualité de l'eau à ${item.displayName}` : (item.isLocality ? `Qualité de l'eau à ${item.displayName} (${item.commune})` : `Qualité de l'eau à ${item.displayName}`);
             displayCommune.textContent = titleText;
+            currentTH = item.th; // Stocker le TH pour le simulateur
             resultPanel.style.display = 'block';
             sliderWrapper.style.display = 'block';
             messageStandard.style.display = 'block';
-            simContainer.style.display = 'none'; // Reset simulator
+            simContainer.style.display = 'none'; 
             updateScoreUI(item.th);
         }
 
@@ -489,25 +495,41 @@
             drop.style.left = `${percent}%`;
         }
 
-        // --- SIMULATEUR LOGIC ---
+        // --- SIMULATEUR LOGIC (FACTEUR PIVOT 12°f) ---
         function updateSimulator() {
             const people = parseInt(inputPpl.value) || 3;
             const hasBottles = inputBottle.checked;
 
-            // 1. Produits Entretien (180€/pers/an, économie 50%)
-            const savingsProd = Math.round(people * 180 * 0.50);
+            // FACTEUR AGGRAVANT (Pivot = 12°f)
+            // Si TH = 24 -> Facteur 2 (Double de dégâts)
+            // Si TH = 36 -> Facteur 3 (Triple de dégâts)
+            let factor = 1;
+            if(currentTH > 12) {
+                factor = currentTH / 12;
+            }
+
+            // 1. Produits Entretien (180€/pers/an, économie 30%) -> IMPACTÉ
+            const savingsProd = Math.round((people * 180 * 0.30) * factor);
             
-            // 2. Energie (Perte 40€/pers/an)
-            const savingsEnergy = Math.round(people * 40);
+            // 2. Energie (Perte 40€/pers/an) -> IMPACTÉ
+            const savingsEnergy = Math.round((people * 40) * factor);
             
-            // 3. Bouteilles (0.50€/j/pers)
+            // 3. Bouteilles (0.50€/j/pers) -> NON IMPACTÉ (Prix fixe)
             const costBottles = hasBottles ? Math.round(people * 365 * 0.50) : 0;
             
-            // 4. Appareils (Forfait 60€/foyer)
-            const savingsAppliance = 60;
+            // 4. Appareils (Forfait 180€/foyer) -> IMPACTÉ
+            const savingsAppliance = Math.round(180 * factor);
 
             const total = savingsProd + savingsEnergy + costBottles + savingsAppliance;
-            const plasticWeight = hasBottles ? Math.round(people * 10) : 0; // 10kg/pers/an
+            const plasticWeight = hasBottles ? Math.round(people * 10) : 0;
+
+            // Affichage Facteur Alerte
+            if(factor > 1.2) {
+                simAlert.style.display = 'block';
+                simAlert.innerHTML = `⚠️ Dureté extrême (${currentTH.toFixed(1)}°f) : Vos pertes sont multipliées par <strong>${factor.toFixed(1)}x</strong> par rapport à une eau idéale.`;
+            } else {
+                simAlert.style.display = 'none';
+            }
 
             outProd.textContent = savingsProd + " €";
             outEnergy.textContent = savingsEnergy + " €";
