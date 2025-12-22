@@ -1,6 +1,6 @@
 (function() {
     // ==========================================================================
-    // 1. CONFIGURATION
+    // 1. CONFIGURATION (PUBLIC)
     // ==========================================================================
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
@@ -10,38 +10,28 @@
     };
 
     // ==========================================================================
-    // 2. DONNÉES MAÎTRES
+    // 2. DONNÉES MAÎTRES (Synchronisées avec version Revendeur)
     // ==========================================================================
     const MASTER_DATA = {
         // --- QUARTIERS VDL ---
-        "Beggen": { th: 27.9, city: "Luxembourg" },
-        "Belair": { th: 28.8, city: "Luxembourg" },
-        "Belair-Nord": { th: 28.8, city: "Luxembourg" },
-        "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
-        "Verlorenkost": { th: 32.0, city: "Luxembourg" },
-        "Cents": { th: 27.4, city: "Luxembourg" },
-        "Cessange": { th: 28.8, city: "Luxembourg" },
-        "Clausen": { th: 27.9, city: "Luxembourg" },
-        "Dommeldange": { th: 27.9, city: "Luxembourg" },
-        "Eich": { th: 26.3, city: "Luxembourg" },
-        "Gare": { th: 32.0, city: "Luxembourg" },
-        "Gasperich": { th: 23.1, city: "Luxembourg" },
-        "Grund": { th: 27.4, city: "Luxembourg" },
-        "Hamm": { th: 27.4, city: "Luxembourg" },
-        "Hollerich": { th: 31.9, city: "Luxembourg" },
-        "Kirchberg": { th: 27.4, city: "Luxembourg" },
-        "Limpertsberg": { th: 26.3, city: "Luxembourg" },
-        "Merl": { th: 31.9, city: "Luxembourg" },
-        "Muhlenbach": { th: 26.3, city: "Luxembourg" },
-        "Neudorf": { th: 27.4, city: "Luxembourg" },
-        "Weimershof": { th: 27.4, city: "Luxembourg" },
-        "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
-        "Pulvermuhl": { th: 32.0, city: "Luxembourg" },
-        "Rollingergrund": { th: 28.8, city: "Luxembourg" },
-        "Ville-Haute": { th: 28.8, city: "Luxembourg" },
-        "Weimerskirch": { th: 27.4, city: "Luxembourg" },
+        "Beggen": { th: 27.9, city: "Luxembourg" }, "Belair": { th: 28.8, city: "Luxembourg" },
+        "Belair-Nord": { th: 28.8, city: "Luxembourg" }, "Bonnevoie-Nord": { th: 32.0, city: "Luxembourg" },
+        "Verlorenkost": { th: 32.0, city: "Luxembourg" }, "Cents": { th: 27.4, city: "Luxembourg" },
+        "Cessange": { th: 28.8, city: "Luxembourg" }, "Clausen": { th: 27.9, city: "Luxembourg" },
+        "Dommeldange": { th: 27.9, city: "Luxembourg" }, "Eich": { th: 26.3, city: "Luxembourg" },
+        "Gare": { th: 32.0, city: "Luxembourg" }, "Gasperich": { th: 23.1, city: "Luxembourg" },
+        "Grund": { th: 27.4, city: "Luxembourg" }, "Hamm": { th: 27.4, city: "Luxembourg" },
+        "Hollerich": { th: 31.9, city: "Luxembourg" }, "Kirchberg": { th: 27.4, city: "Luxembourg" },
+        "Limpertsberg": { th: 26.3, city: "Luxembourg" }, "Merl": { th: 31.9, city: "Luxembourg" },
+        "Muhlenbach": { th: 26.3, city: "Luxembourg" }, "Neudorf": { th: 27.4, city: "Luxembourg" },
+        "Weimershof": { th: 27.4, city: "Luxembourg" }, "Pfaffenthal": { th: 27.9, city: "Luxembourg" },
+        "Pulvermuhl": { th: 32.0, city: "Luxembourg" }, "Rollingergrund": { th: 28.8, city: "Luxembourg" },
+        "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
 
-        // --- RESTE DU PAYS ---
+        // --- RESTE DU PAYS (Avec correctifs Remich/Mondorf) ---
+        "Remich": { th: 12, localities: ["Remich"] },
+        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
+        
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -101,7 +91,6 @@
         "Mertert": { th: 31, localities: ["Mertert", "Wasserbillig"] },
         "Mertzig": { th: 19, localities: ["Mertzig"] },
         "Mondercange": { th: 34, localities: ["Mondercange", "Bergem", "Foetz", "Pontpierre"] },
-        "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
         "Niederanven": { th: 26, localities: ["Niederanven", "Ernster", "Hostert", "Oberanven", "Rameldange", "Senningen", "Senningerberg", "Waldhof"] },
         "Nommern": { th: 28, localities: ["Nommern", "Cruchten", "Schrondweiler"] },
         "Parc Hosingen": { th: 19, localities: ["Hosingen", "Bockholtz", "Consthum", "Dorscheid", "Holzthum", "Hoscheid", "Hoscheid-Dickt", "Neidhausen", "Oberschlinder", "Rodershausen", "Unterschlinder", "Wahlhausen"] },
@@ -112,7 +101,6 @@
         "Reckange-sur-Mess": { th: 33, localities: ["Reckange-sur-Mess", "Ehlange", "Limpach", "Pissange", "Roedgen", "Wickrange"] },
         "Redange-sur-Attert": { th: 20, localities: ["Redange-sur-Attert", "Eltz", "Lannen", "Nagem", "Niederpallen", "Ospern", "Reichlange"] },
         "Reisdorf": { th: 20, localities: ["Reisdorf", "Bigelbach", "Hoesdorf", "Wallendorf-Pont"] },
-        "Remich": { th: 12, localities: ["Remich"] },
         "Roeser": { th: 34, localities: ["Roeser", "Berchem", "Bivange", "Crauthem", "Kockelscheuer", "Livange", "Peppange"] },
         "Rosport-Mompach": { th: 30, localities: ["Rosport", "Born", "Dickweiler", "Girst", "Girsterklaus", "Hinkel", "Mompach", "Moersdorf", "Osweiler", "Steinheim"] },
         "Rumelange": { th: 35, localities: ["Rumelange"] },
@@ -146,7 +134,7 @@
     };
 
     // ==========================================================================
-    // 3. CSS ISOLÉ
+    // 3. CSS ISOLÉ (Namespace .kw-lux-)
     // ==========================================================================
     const css = `
         #wyws-luxembourg-container { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
@@ -251,7 +239,7 @@
     `;
 
     // ==========================================================================
-    // 5. LOGIQUE JS
+    // 5. LOGIQUE JS (Avec Sécurité API)
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -283,64 +271,31 @@
         function buildSearchIndex() {
             searchIndex = [];
             Object.entries(MASTER_DATA).forEach(([commune, data]) => {
-                // Pour les quartiers de VDL
                 if (data.city === "Luxembourg") {
-                    // Entrée 1 : "Beggen (Luxembourg)"
-                    searchIndex.push({
-                        displayName: `${commune} (Luxembourg)`,
-                        searchName: `${commune.toLowerCase()} luxembourg`,
-                        commune: commune,
-                        th: data.th,
-                        isLocality: true
-                    });
-                    
-                    // Entrée 2 : "Luxembourg (Beggen)"
-                    searchIndex.push({
-                        displayName: `Luxembourg (${commune})`,
-                        searchName: `luxembourg ${commune.toLowerCase()}`,
-                        commune: commune,
-                        th: data.th,
-                        isLocality: true
-                    });
+                    searchIndex.push({ displayName: `${commune} (Luxembourg)`, searchName: `${commune.toLowerCase()} luxembourg`, commune: commune, th: data.th, isLocality: true });
+                    searchIndex.push({ displayName: `Luxembourg (${commune})`, searchName: `luxembourg ${commune.toLowerCase()}`, commune: commune, th: data.th, isLocality: true });
                 } else {
-                    // Pour les communes standards
-                    searchIndex.push({
-                        displayName: commune,
-                        searchName: commune.toLowerCase(),
-                        commune: commune,
-                        th: data.th,
-                        isLocality: false
-                    });
-
-                    // Ajouter les localités enfants
+                    searchIndex.push({ displayName: commune, searchName: commune.toLowerCase(), commune: commune, th: data.th, isLocality: false });
                     if (data.localities && Array.isArray(data.localities)) {
                         data.localities.forEach(locality => {
                             if (locality.toLowerCase() !== commune.toLowerCase()) {
-                                searchIndex.push({
-                                    displayName: locality,
-                                    searchName: locality.toLowerCase(),
-                                    commune: commune,
-                                    th: data.th,
-                                    isLocality: true
-                                });
+                                searchIndex.push({ displayName: locality, searchName: locality.toLowerCase(), commune: commune, th: data.th, isLocality: true });
                             }
                         });
                     }
                 }
             });
-            // Trier alphabétiquement
             searchIndex.sort((a, b) => a.displayName.localeCompare(b.displayName, 'fr'));
         }
 
-        // CHARGEMENT API
+        // CHARGEMENT API AVEC SÉCURITÉ
         async function loadData() {
-            // Plan B immédiat
             buildSearchIndex();
             loader.style.display = 'none';
 
             try {
                 const response = await fetch(CONFIG.apiUrl);
-                if (!response.ok) return; 
+                if (!response.ok) return;
                 
                 const geoData = await response.json();
                 if (!geoData.features || geoData.features.length === 0) return;
@@ -366,18 +321,20 @@
                     if (nameApi && typeof nameApi === 'string') {
                         const cleanName = nameApi.trim().toLowerCase();
                         const newVal = parseFloat(thApi);
-                        
                         const realKey = lookup[cleanName];
                         
-                        if (realKey && MASTER_DATA[realKey] && !isNaN(newVal)) {
-                            MASTER_DATA[realKey].th = newVal;
+                        // SÉCURITÉ RENFORCÉE (MEME LOGIQUE QUE DEALER)
+                        // 1. On ignore si la valeur est <= 0.1 (Anti-bug -2)
+                        // 2. On applique Math.max (Prend la pire dureté entre API et Secours)
+                        if (realKey && MASTER_DATA[realKey] && !isNaN(newVal) && newVal > 0.1) {
+                            MASTER_DATA[realKey].th = Math.max(MASTER_DATA[realKey].th, newVal);
                             updatesCount++;
                         }
                     }
                 });
 
                 if (updatesCount > 0) {
-                    console.log('Widget: Mise à jour API réussie pour ' + updatesCount + ' entrées.');
+                    console.log('Widget: Mise à jour API sécurisée pour ' + updatesCount + ' entrées.');
                     buildSearchIndex();
                 }
 
@@ -399,23 +356,18 @@
                 return; 
             }
             
-            const matches = searchIndex
-                .filter(item => item.searchName.includes(val))
-                .slice(0, 10);
-            
+            const matches = searchIndex.filter(item => item.searchName.includes(val)).slice(0, 10);
             suggestions.innerHTML = '';
             if(!matches.length) { suggestions.style.display = 'none'; return; }
 
             matches.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'kw-lux-suggestion-item';
-                
                 if (item.isLocality && !item.displayName.includes('(')) {
                      div.innerHTML = `${item.displayName} <span class="kw-lux-locality-hint">(${item.commune})</span>`;
                 } else {
                     div.textContent = item.displayName;
                 }
-                
                 div.onclick = () => {
                     input.value = item.displayName;
                     suggestions.style.display = 'none';
@@ -442,7 +394,7 @@
             updateScoreUI(item.th);
         }
 
-        // SCORE
+        // CALCUL SCORE
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
