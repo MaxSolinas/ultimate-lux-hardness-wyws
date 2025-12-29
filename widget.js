@@ -184,12 +184,24 @@
     const htmlTemplate = `
         <div id="wyws-luxembourg-container">
             <div class="kw-lux-header">
-                <h2 class="kw-lux-headline">
+                
+                <div class="kw-lux-headline">
                     <span class="kw-lux-top-line">WHAT'S YOUR</span>
                     <span class="kw-lux-second-line">
                         <span class="kw-lux-word-water">WATER</span> <span class="kw-lux-word-score">SCORE?<sup class="kw-lux-tm">TM</sup></span>
                     </span>
+                </div>
+
+                <h2 style="
+                    font-size: 1.3rem; 
+                    color: #003594; 
+                    margin: 10px 0 5px 0; 
+                    font-weight: 700; 
+                    text-transform: uppercase;
+                    font-family: inherit;">
+                    TESTEZ LA DURETÉ DE VOTRE EAU
                 </h2>
+
                 <div class="kw-lux-subtext">Découvrez la qualité de votre eau en quelques secondes.</div>
             </div>
 
