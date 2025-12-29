@@ -5,8 +5,8 @@
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
         apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
-        quoteLink: '/durete-de-leau-au-luxembourg#Obtenez-votre-devis',
-        websiteLink: 'https://www.aquapurify.eu'
+        quoteLink: '/get-a-quote',
+        websiteLink: 'https://www.aquapurify.lu'
     };
 
     // ==========================================================================
