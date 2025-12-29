@@ -134,41 +134,41 @@
     };
 
     // ==========================================================================
-    // 3. CSS ISOLÉ (Namespace .kw-lux-)
+    // 3. CSS ISOLÉ (Namespace .kw-lux-) - COULEURS CORRIGÉES
     // ==========================================================================
     const css = `
         #wyws-luxembourg-container { font-family: 'Segoe UI', Arial, sans-serif; max-width: 650px; margin: 30px auto; background: #fff; border: 1px solid #e1e4e8; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: visible; text-align: center; position: relative; padding-bottom: 25px; }
         .kw-lux-header { padding: 30px 20px 10px; border-radius: 12px 12px 0 0; }
-        .kw-lux-headline { text-transform: uppercase; line-height: 1.1; color: #00ADEF; font-size: 2.4rem; margin: 0; }
-        .kw-lux-top-line { font-family: 'Arial Black', sans-serif; font-weight: 900; display: block; letter-spacing: -1px; }
-        .kw-lux-second-line { display: block; color: #0054A4; }
+        .kw-lux-headline { text-transform: uppercase; line-height: 1.1; color: #298FC2; font-size: 2.4rem; margin: 0; }
+        .kw-lux-top-line { font-family: 'Arial Black', sans-serif; font-weight: 900; display: block; letter-spacing: -1px; color: #298FC2; }
+        .kw-lux-second-line { display: block; color: #003594; }
         .kw-lux-word-water { font-weight: 300; font-family: 'Segoe UI', sans-serif; } 
         .kw-lux-word-score { font-family: 'Arial Black', sans-serif; font-weight: 900; letter-spacing: -1px; }
         .kw-lux-tm { font-size: 0.3em; vertical-align: top; position: relative; top: 0.1em; font-weight: 400; margin-left: 2px; line-height: 1; font-family: Arial, sans-serif; }
         .kw-lux-subtext { color: #666; margin-top: 10px; font-size: 0.95rem; }
         .kw-lux-search-area { padding: 0 30px 15px; position: relative; }
         .kw-lux-input { width: 100%; padding: 15px; border: 2px solid #ddd; border-radius: 50px; font-size: 16px; outline: none; text-align: center; transition: 0.3s; box-sizing: border-box; }
-        .kw-lux-input:focus { border-color: #0054A4; box-shadow: 0 0 0 3px rgba(0, 84, 164, 0.1); }
+        .kw-lux-input:focus { border-color: #003594; box-shadow: 0 0 0 3px rgba(0, 53, 148, 0.1); }
         .kw-lux-suggestions { position: absolute; top: 65px; left: 30px; right: 30px; background: white; border: 1px solid #cce4f7; z-index: 9999; max-height: 250px; overflow-y: auto; box-shadow: 0 15px 30px rgba(0,0,0,0.15); display: none; border-radius: 8px; }
         .kw-lux-suggestion-item { padding: 12px 15px; cursor: pointer; border-bottom: 1px solid #f0f0f0; text-align: left; }
-        .kw-lux-suggestion-item:hover { background: #f0f7ff; color: #0054A4; }
+        .kw-lux-suggestion-item:hover { background: #f0f7ff; color: #003594; }
         .kw-lux-locality-hint { font-size: 0.85em; color: #888; margin-left: 8px; font-style: italic; }
         .kw-lux-slider-wrapper { padding: 0 20px; transition: opacity 0.3s; margin-top: 10px; }
         .kw-lux-slider-container { position: relative; height: 60px; margin: 20px 10px; }
-        .kw-lux-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E5007E 50%, #00ADEF 100%); position: relative; top: 10px; }
+        .kw-lux-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E6007E 50%, #298FC2 100%); position: relative; top: 10px; }
         .kw-lux-grid-lines { position: absolute; top: 10px; left: 0; width: 100%; height: 40px; display: flex; justify-content: space-between; pointer-events: none; }
         .kw-lux-line { width: 1px; background: rgba(255,255,255,0.4); height: 100%; }
         .kw-lux-water-drop { position: absolute; top: -15px; transform: translateX(-50%); width: 50px; height: 65px; transition: left 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); }
-        .kw-lux-drop-shape { width: 42px; height: 42px; background: #00ADEF; border-radius: 0 50% 50% 50%; transform: rotate(45deg); margin: 0 auto; border: 3px solid white; transition: background 1.5s; }
+        .kw-lux-drop-shape { width: 42px; height: 42px; background: #298FC2; border-radius: 0 50% 50% 50%; transform: rotate(45deg); margin: 0 auto; border: 3px solid white; transition: background 1.5s; }
         .kw-lux-drop-value { position: absolute; top: 13px; left: 0; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
         .kw-lux-labels { display: flex; justify-content: space-between; margin-top: 15px; color: #999; font-size: 11px; font-weight: bold; padding: 0 2px; }
         .kw-lux-result-panel { padding: 0 20px 10px; animation: kw-fadein 0.6s ease-out; }
-        .kw-lux-commune-title { font-size: 1.3rem; font-weight: bold; color: #0054A4; margin-top: 10px; }
+        .kw-lux-commune-title { font-size: 1.3rem; font-weight: bold; color: #003594; margin-top: 10px; }
         .kw-lux-message-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 25px; border: 1px solid #eee; }
-        .kw-lux-cta-button { display: none; margin-top: 15px; background: #0054A4; color: white; text-decoration: none; padding: 14px 30px; border-radius: 6px; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; }
-        .kw-lux-cta-button:hover { background: #003d7a; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,84,164,0.3); }
-        .kw-lux-redirect-btn { display: inline-block; background-color: #00ADEF; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px; transition: background-color 0.3s; }
-        .kw-lux-redirect-btn:hover { background-color: #005bb8; }
+        .kw-lux-cta-button { display: none; margin-top: 15px; background: #003594; color: white; text-decoration: none; padding: 14px 30px; border-radius: 6px; font-weight: bold; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.5px; }
+        .kw-lux-cta-button:hover { background: #002766; transform: translateY(-2px); box-shadow: 0 4px 10px rgba(0,53,148,0.3); }
+        .kw-lux-redirect-btn { display: inline-block; background-color: #298FC2; color: white; padding: 12px 20px; text-decoration: none; border-radius: 5px; font-weight: bold; margin-top: 15px; transition: background-color 0.3s; }
+        .kw-lux-redirect-btn:hover { background-color: #1f7aa8; }
         .kw-lux-footer-block { margin-top: 20px; padding-top: 15px; border-top: 1px solid #eee; margin-left: 30px; margin-right: 30px; }
         .kw-lux-dealer-info { font-size: 11px; color: #555; font-weight: 400; font-family: Arial, sans-serif; line-height: 1.4; display: block; }
         .kw-lux-dealer-link { color: #555; text-decoration: none; font-weight: 400; cursor: pointer; transition: color 0.2s; }
@@ -239,7 +239,7 @@
     `;
 
     // ==========================================================================
-    // 5. LOGIQUE JS (Avec Sécurité API)
+    // 5. LOGIQUE JS (Optimisée)
     // ==========================================================================
     function initWidget() {
         const root = document.getElementById(CONFIG.containerId);
@@ -267,13 +267,19 @@
 
         let searchIndex = [];
 
-        // CONSTRUIRE L'INDEX DE RECHERCHE
+        // CONSTRUIRE L'INDEX DE RECHERCHE (Format Luxembourg corrigé)
         function buildSearchIndex() {
             searchIndex = [];
             Object.entries(MASTER_DATA).forEach(([commune, data]) => {
                 if (data.city === "Luxembourg") {
-                    searchIndex.push({ displayName: `${commune} (Luxembourg)`, searchName: `${commune.toLowerCase()} luxembourg`, commune: commune, th: data.th, isLocality: true });
-                    searchIndex.push({ displayName: `Luxembourg (${commune})`, searchName: `luxembourg ${commune.toLowerCase()}`, commune: commune, th: data.th, isLocality: true });
+                    // Format: Belair (Luxembourg) - UN SEUL FORMAT
+                    searchIndex.push({ 
+                        displayName: `${commune} (Luxembourg)`, 
+                        searchName: `${commune.toLowerCase()} luxembourg`, 
+                        commune: commune, 
+                        th: data.th, 
+                        isLocality: true 
+                    });
                 } else {
                     searchIndex.push({ displayName: commune, searchName: commune.toLowerCase(), commune: commune, th: data.th, isLocality: false });
                     if (data.localities && Array.isArray(data.localities)) {
@@ -288,24 +294,32 @@
             searchIndex.sort((a, b) => a.displayName.localeCompare(b.displayName, 'fr'));
         }
 
-        // CHARGEMENT API AVEC SÉCURITÉ
+        // CHARGEMENT API AVEC SÉCURITÉ (Optimisé)
         async function loadData() {
-            buildSearchIndex();
             loader.style.display = 'none';
 
             try {
                 const response = await fetch(CONFIG.apiUrl);
-                if (!response.ok) return;
+                if (!response.ok) {
+                    buildSearchIndex();
+                    return;
+                }
                 
                 const geoData = await response.json();
-                if (!geoData.features || geoData.features.length === 0) return;
+                if (!geoData.features || geoData.features.length === 0) {
+                    buildSearchIndex();
+                    return;
+                }
 
                 const props = geoData.features[0].properties;
                 const keys = Object.keys(props);
                 const keyName = keys.find(k => k.toLowerCase().includes('commune'));
                 const keyVal = keys.find(k => k.toLowerCase().includes('wsz') || k.toLowerCase().includes('durete'));
 
-                if (!keyName || !keyVal) return;
+                if (!keyName || !keyVal) {
+                    buildSearchIndex();
+                    return;
+                }
 
                 const lookup = {};
                 Object.keys(MASTER_DATA).forEach(k => {
@@ -323,7 +337,7 @@
                         const newVal = parseFloat(thApi);
                         const realKey = lookup[cleanName];
                         
-                        // SÉCURITÉ RENFORCÉE (MEME LOGIQUE QUE DEALER)
+                        // SÉCURITÉ RENFORCÉE
                         // 1. On ignore si la valeur est <= 0.1 (Anti-bug -2)
                         // 2. On applique Math.max (Prend la pire dureté entre API et Secours)
                         if (realKey && MASTER_DATA[realKey] && !isNaN(newVal) && newVal > 0.1) {
@@ -334,12 +348,14 @@
                 });
 
                 if (updatesCount > 0) {
-                    console.log('Widget: Mise à jour API sécurisée pour ' + updatesCount + ' entrées.');
-                    buildSearchIndex();
+                    console.log(`Widget: ${updatesCount}/${Object.keys(MASTER_DATA).length} communes mises à jour via API.`);
                 }
 
             } catch (e) {
                 console.warn('Widget: API inaccessible, utilisation des données locales.');
+            } finally {
+                // TOUJOURS construire l'index (une seule fois)
+                buildSearchIndex();
             }
         }
 
@@ -363,11 +379,14 @@
             matches.forEach(item => {
                 const div = document.createElement('div');
                 div.className = 'kw-lux-suggestion-item';
+                
+                // Affichage avec hint pour localités sauf Luxembourg qui a déjà le format complet
                 if (item.isLocality && !item.displayName.includes('(')) {
                      div.innerHTML = `${item.displayName} <span class="kw-lux-locality-hint">(${item.commune})</span>`;
                 } else {
                     div.textContent = item.displayName;
                 }
+                
                 div.onclick = () => {
                     input.value = item.displayName;
                     suggestions.style.display = 'none';
@@ -381,6 +400,8 @@
         // SÉLECTION
         function processSelection(item) {
             let titleText = `Qualité de l'eau à ${item.displayName}`;
+            
+            // Gestion du titre - Luxembourg a déjà le bon format
             if(item.displayName.includes('(')) {
                  titleText = `Qualité de l'eau à ${item.displayName}`;
             } else if (item.isLocality) {
@@ -394,7 +415,7 @@
             updateScoreUI(item.th);
         }
 
-        // CALCUL SCORE
+        // CALCUL SCORE (Couleurs corrigées)
         function updateScoreUI(thValue) {
             const th = parseFloat(thValue);
             let score;
@@ -409,13 +430,25 @@
             let color, title, text;
             
             if (th < 12) {
-                color = '#00ADEF'; title = "EAU DOUCE (OK)"; text = `Votre eau (${th.toFixed(1)}°f) respecte le seuil de confort de référence (12°f).<br>Aucun traitement n'est nécessaire.`; ctaBtn.style.display = 'none';
+                color = '#298FC2'; 
+                title = "EAU DOUCE (OK)"; 
+                text = `Votre eau (${th.toFixed(1)}°f) respecte le seuil de confort de référence (12°f).<br>Aucun traitement n'est nécessaire.`; 
+                ctaBtn.style.display = 'none';
             } else if (th < 15) {
-                color = '#00ADEF'; title = "EAU PEU CALCAIRE"; text = `Votre eau (${th.toFixed(1)}°f) est légèrement au-dessus de la référence (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#298FC2'; 
+                title = "EAU PEU CALCAIRE"; 
+                text = `Votre eau (${th.toFixed(1)}°f) est légèrement au-dessus de la référence (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             } else if (th < 30) {
-                color = '#E5007E'; title = "ADOUCISSEUR RECOMMANDÉ"; text = `Votre eau est calcaire (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#E6007E'; 
+                title = "ADOUCISSEUR RECOMMANDÉ"; 
+                text = `Votre eau est calcaire (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             } else {
-                color = '#F57F20'; title = "ADOUCISSEUR INDISPENSABLE"; text = `Votre eau est très dure (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; ctaBtn.style.display = 'inline-block';
+                color = '#E6007E'; 
+                title = "ADOUCISSEUR INDISPENSABLE"; 
+                text = `Votre eau est très dure (${th.toFixed(1)}°f), soit <strong>${ratio} fois</strong> la référence de confort (12°f).<br>L'objectif en sortie d'adoucisseur est entre <strong>6 et 8°f</strong>.`; 
+                ctaBtn.style.display = 'inline-block';
             }
 
             verdictTitle.textContent = title;
