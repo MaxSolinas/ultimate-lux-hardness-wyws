@@ -246,8 +246,7 @@
                         <option value="" disabled selected>-- Sélectionnez --</option>
                         <option value="appt">Appartement</option>
                         <option value="maison">Maison Unifamiliale</option>
-                        <option value="collectif">Immeuble Collectif (Syndic)</option>
-                        <option value="pro">Bureau / Commerce / Horeca</option>
+                        <option value="collectif">Immeuble Collectif</option>
                     </select>
 
                     <div id="kw-dealer-collectif-form" style="display:none; margin-top:15px; border-top:1px solid #ccc; padding-top:10px;">
