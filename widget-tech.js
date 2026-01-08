@@ -429,7 +429,7 @@
                 resVol.textContent = volAdjusted + " L";
 
                 // C. Calcul Conso Sel (Basé sur le volume ajusté)
-                const dailyWater = ppl * 100; // 100L / pers
+                const dailyWater = ppl * 135; // 135L / pers
                 
                 // Nombre de régénérations par an
                 const regensPerYear = (dailyWater * 365) / volAdjusted;
