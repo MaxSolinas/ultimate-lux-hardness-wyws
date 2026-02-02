@@ -486,19 +486,21 @@
             let model = "";
             let desc = `Dimensionnement basé sur DIN 1988-300 pour ${apts} appartements.`;
             
-            if (peakFlowM3H <= 3.4) model = "Kinetico S150 XP";
-            else if (peakFlowM3H <= 4.0) model = "Kinetico S250 XP";
-            else if (peakFlowM3H <= 4.3) model = "Kinetico S350";
-            else if (peakFlowM3H <= 5.0) model = "Kinetico S550";
-            else if (peakFlowM3H <= 6.4) model = "Kinetico CP213s OD";
-            else if (peakFlowM3H <= 7.9) model = "Kinetico CP216s OD";
-            else if (peakFlowM3H <= 12.7) model = "Kinetico CP413s OD";
-            else if (peakFlowM3H <= 15.8) model = "Kinetico CP416s OD";
-            else if (peakFlowM3H <= 19.0) model = "Kinetico CP613s OD";
-            else if (peakFlowM3H <= 23.8) model = "Kinetico CP616s OD";
-            else if (peakFlowM3H <= 25.4) model = "Kinetico CP813s OD";
-            else if (peakFlowM3H <= 31.8) model = "Kinetico CP816s OD";
-            else model = "Solution Sur Mesure (Débit > 32m3/h)";
+            if (peakFlowM3H <= 2.7) model = "Kinetico S150 XP";
+            else if (peakFlowM3H <= 3.3) model = "Kinetico S250 XP";
+            else if (peakFlowM3H <= 4.7) model = "Kinetico S250 OD XP";
+            else if (peakFlowM3H <= 4.8) model = "Kinetico 2100s OD";
+            else if (peakFlowM3H <= 3.5) model = "Kinetico S350 XP";
+            else if (peakFlowM3H <= 3.9) model = "Kinetico S550 XP";
+            else if (peakFlowM3H <= 7.7) model = "Kinetico CP213s OD";
+            else if (peakFlowM3H <= 9.3) model = "Kinetico CP216s OD";
+            else if (peakFlowM3H <= 15.5) model = "Kinetico CP413s OD";
+            else if (peakFlowM3H <= 18.6) model = "Kinetico CP416s OD";
+            else if (peakFlowM3H <= 23.2) model = "Kinetico CP613s OD";
+            else if (peakFlowM3H <= 27.9) model = "Kinetico CP616s OD";
+            else if (peakFlowM3H <= 30.9) model = "Kinetico CP813s OD";
+            else if (peakFlowM3H <= 37.3) model = "Kinetico CP816s OD";
+            else model = "Solution sur mesure (Débit > 38m3/h)";
 
             prodName.textContent = model;
             prodDesc.innerHTML = desc;
