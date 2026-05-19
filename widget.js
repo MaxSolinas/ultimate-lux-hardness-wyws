@@ -29,9 +29,9 @@
         "Ville-Haute": { th: 28.8, city: "Luxembourg" }, "Weimerskirch": { th: 27.4, city: "Luxembourg" },
 
         // --- RESTE DU PAYS (Avec correctifs Remich/Mondorf) ---
-        "Remich": { th: 12, localities: ["Remich"] },
+        "Remich": { th: 14, localities: ["Remich"] },
         "Mondorf-les-Bains": { th: 33, localities: ["Mondorf-les-Bains", "Altwies", "Ellange"] },
-        
+        "Ingeldorf": { th: 46, localities: ["Ingeldorf"] },
         "Beaufort": { th: 33, localities: ["Beaufort", "Dillingen"] },
         "Bech": { th: 31, localities: ["Bech", "Altrier", "Blumenthal", "Geyershof", "Graulinster", "Hemstal", "Hersberg", "Rippig", "Zittig"] },
         "Beckerich": { th: 19, localities: ["Beckerich", "Elvange", "Hovelange", "Huttange", "Levelange", "Noerdange", "Oberpallen", "Schweich"] },
@@ -56,7 +56,7 @@
         "Dudelange": { th: 35, localities: ["Dudelange"] },
         "Echternach": { th: 30, localities: ["Echternach"] },
         "Ell": { th: 21, localities: ["Ell", "Colpach-Bas", "Colpach-Haut", "Petit-Nobressart", "Roodt"] },
-        "Erpeldange-sur-Sûre": { th: 20, localities: ["Erpeldange-sur-Sûre", "Burden", "Ingeldorf"] },
+        "Erpeldange-sur-Sûre": { th: 20, localities: ["Erpeldange-sur-Sûre", "Burden"] },
         "Esch-sur-Alzette": { th: 35, localities: ["Esch-sur-Alzette"] },
         "Esch-sur-Sûre": { th: 14, localities: ["Esch-sur-Sûre", "Eschdorf", "Heiderscheid", "Heiderscheidergrund", "Hierheck", "Merscheid", "Ringel", "Tadler"] },
         "Ettelbruck": { th: 20, localities: ["Ettelbruck", "Warken"] },
