@@ -4,7 +4,7 @@
     // ==========================================================================
     const CONFIG = {
         containerId: 'wyws-luxembourg-widget',
-        apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20251211-020257/wasserharte.geojson',
+        apiUrl: 'https://download.data.public.lu/resources/durete-de-leau/20260611-010226/wasserharte.geojson',
         quoteLink: '/get-a-quote',
         websiteLink: 'https://www.aquapurify.lu'
     };
@@ -154,14 +154,14 @@
         .kw-lux-suggestion-item:hover { background: #f0f7ff; color: #003594; }
         .kw-lux-locality-hint { font-size: 0.85em; color: #888; margin-left: 8px; font-style: italic; }
         .kw-lux-slider-wrapper { padding: 0 20px; transition: opacity 0.3s; margin-top: 10px; }
-        .kw-lux-slider-container { position: relative; height: 60px; margin: 20px 10px; }
-        .kw-lux-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #F57F20 0%, #E6007E 50%, #298FC2 100%); position: relative; top: 10px; }
-        .kw-lux-grid-lines { position: absolute; top: 10px; left: 0; width: 100%; height: 40px; display: flex; justify-content: space-between; pointer-events: none; }
-        .kw-lux-line { width: 1px; background: rgba(255,255,255,0.4); height: 100%; }
-        .kw-lux-water-drop { position: absolute; top: -15px; transform: translateX(-50%); width: 50px; height: 65px; transition: left 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.2)); }
-        .kw-lux-drop-shape { width: 42px; height: 42px; background: #298FC2; border-radius: 0 50% 50% 50%; transform: rotate(45deg); margin: 0 auto; border: 3px solid white; transition: background 1.5s; }
-        .kw-lux-drop-value { position: absolute; top: 13px; left: 0; width: 100%; text-align: center; color: white; font-weight: 800; font-size: 15px; text-shadow: 0 1px 2px rgba(0,0,0,0.2); }
-        .kw-lux-labels { display: flex; justify-content: space-between; margin-top: 15px; color: #999; font-size: 11px; font-weight: bold; padding: 0 2px; }
+        .kw-lux-slider-container { position: relative; height: 62px; margin: 20px 10px; }
+        .kw-lux-slider-bar { height: 40px; width: 100%; border-radius: 4px; background: linear-gradient(90deg, #f26d21 0%, #E6007E 50%, #298FC2 80%, #003594 100%); position: relative; top: 10px; overflow: hidden; }
+        .kw-lux-grid-lines { position: absolute; top: 10px; left: 0; width: 100%; height: 40px; display: flex; justify-content: space-between; pointer-events: none; z-index: 2; }
+        .kw-lux-line { width: 1px; background: rgba(255,255,255,0.35); height: 100%; }
+        .kw-lux-water-drop { position: absolute; top: -17px; transform: translateX(-50%); width: 50px; height: 65px; transition: left 1.5s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.5s; z-index: 10; filter: drop-shadow(0 3px 5px rgba(0,0,0,0.22)); }
+        .kw-lux-drop-shape { width: 42px; height: 42px; background: #FFFFFF; border-radius: 0 50% 50% 50%; transform: rotate(45deg) scaleY(-1); margin: 0 auto; border: 3px solid #FFFFFF; box-shadow: 0 0 0 1px rgba(0,0,0,0.08); }
+        .kw-lux-drop-value { position: absolute; top: 13px; left: 0; width: 100%; text-align: center; color: #003594; font-weight: 900; font-size: 15px; text-shadow: none; }
+        .kw-lux-labels { position: absolute; top: 10px; left: 0; right: 0; height: 40px; display: flex; align-items: center; justify-content: space-between; margin: 0; color: rgba(255,255,255,0.94); font-size: 11px; font-weight: 800; padding: 0 10px; box-sizing: border-box; text-shadow: 0 1px 2px rgba(0,0,0,0.28); pointer-events: none; z-index: 3; }
         .kw-lux-result-panel { padding: 0 20px 10px; animation: kw-fadein 0.6s ease-out; }
         .kw-lux-commune-title { font-size: 1.3rem; font-weight: bold; color: #003594; margin-top: 10px; }
         .kw-lux-message-box { background: #f8f9fa; padding: 20px; border-radius: 10px; margin-top: 25px; border: 1px solid #eee; }
@@ -467,8 +467,9 @@
             verdictTitle.style.color = color;
             verdictDesc.innerHTML = text;
             scoreVal.textContent = score;
-            dropShape.style.background = color;
-            dropShape.style.borderColor = "white";
+            dropShape.style.background = '#FFFFFF';
+            dropShape.style.borderColor = '#FFFFFF';
+            scoreVal.style.color = '#003594';
             
             drop.style.opacity = '1';
             const percent = ((score - 30) / 70) * 100;
