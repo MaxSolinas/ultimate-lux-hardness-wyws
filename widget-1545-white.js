@@ -3,7 +3,7 @@
 
     const visualOverrideCss = `
         #wyws-luxembourg-container .kw-lux-slider-wrapper {
-            padding: 26px 20px 22px !important;
+            padding: 14px 20px 18px !important;
             margin-top: 10px !important;
             background: #FFFFFF !important;
             transition: opacity 0.3s !important;
@@ -11,7 +11,7 @@
 
         #wyws-luxembourg-container .kw-lux-slider-container {
             position: relative !important;
-            height: 86px !important;
+            height: 100px !important;
             margin: 0 auto !important;
             max-width: 600px !important;
         }
@@ -43,13 +43,15 @@
             content: "" !important;
             position: absolute !important;
             inset: 0 !important;
-            background: repeating-linear-gradient(90deg,
-                transparent 0,
-                transparent calc(12.5% - 1px),
-                #00384D calc(12.5% - 1px),
-                #00384D calc(12.5% + 1px),
-                transparent calc(12.5% + 1px),
-                transparent 12.5%
+            background: linear-gradient(90deg,
+                transparent 0%, transparent calc(12.5% - 1px), #00384D calc(12.5% - 1px), #00384D calc(12.5% + 1px), transparent calc(12.5% + 1px),
+                transparent calc(25% - 1px), #00384D calc(25% - 1px), #00384D calc(25% + 1px), transparent calc(25% + 1px),
+                transparent calc(37.5% - 1px), #00384D calc(37.5% - 1px), #00384D calc(37.5% + 1px), transparent calc(37.5% + 1px),
+                transparent calc(50% - 1px), #00384D calc(50% - 1px), #00384D calc(50% + 1px), transparent calc(50% + 1px),
+                transparent calc(62.5% - 1px), #00384D calc(62.5% - 1px), #00384D calc(62.5% + 1px), transparent calc(62.5% + 1px),
+                transparent calc(75% - 1px), #00384D calc(75% - 1px), #00384D calc(75% + 1px), transparent calc(75% + 1px),
+                transparent calc(87.5% - 1px), #00384D calc(87.5% - 1px), #00384D calc(87.5% + 1px), transparent calc(87.5% + 1px),
+                transparent 100%
             ) !important;
             pointer-events: none !important;
             z-index: 2 !important;
@@ -70,7 +72,7 @@
             align-items: center !important;
             justify-content: space-between !important;
             margin: 0 !important;
-            padding: 0 27px !important;
+            padding: 0 36px !important;
             box-sizing: border-box !important;
             color: #FFFFFF !important;
             font-size: 16px !important;
@@ -85,9 +87,10 @@
         #wyws-luxembourg-container .kw-lux-water-drop {
             position: absolute !important;
             top: auto !important;
-            bottom: 49px !important;
+            bottom: 52px !important;
             width: 26px !important;
-            height: 26px !important;
+            height: 34px !important;
+            background: transparent !important;
             transform: translateX(-50%) !important;
             z-index: 10 !important;
             opacity: 0;
@@ -95,18 +98,30 @@
             filter: drop-shadow(0 2px 3px rgba(0,0,0,0.25)) !important;
         }
 
-        #wyws-luxembourg-container .kw-lux-drop-shape {
+        #wyws-luxembourg-container .kw-lux-water-drop::before {
+            content: "" !important;
+            position: absolute !important;
+            top: 0 !important;
+            left: 0 !important;
             width: 26px !important;
             height: 26px !important;
-            margin: 0 !important;
             background: #2F96C8 !important;
-            border: 0 !important;
-            border-radius: 50% 50% 50% 0 !important;
-            transform: rotate(-45deg) !important;
-            box-shadow: none !important;
-            transition: none !important;
+            border-radius: 50% !important;
         }
 
+        #wyws-luxembourg-container .kw-lux-water-drop::after {
+            content: "" !important;
+            position: absolute !important;
+            top: 20px !important;
+            left: 7px !important;
+            width: 0 !important;
+            height: 0 !important;
+            border-left: 6px solid transparent !important;
+            border-right: 6px solid transparent !important;
+            border-top: 10px solid #2F96C8 !important;
+        }
+
+        #wyws-luxembourg-container .kw-lux-drop-shape,
         #wyws-luxembourg-container .kw-lux-drop-value {
             display: none !important;
         }
