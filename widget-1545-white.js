@@ -24,64 +24,51 @@
             top: auto !important;
             width: 100% !important;
             height: 55px !important;
+            display: grid !important;
+            grid-template-columns: repeat(8, 1fr) !important;
             border-radius: 6px !important;
             overflow: hidden !important;
-            background: linear-gradient(90deg,
-                #F28A34 0%, #F28A34 12.5%,
-                #EB7547 12.5%, #EB7547 25%,
-                #E94D67 25%, #E94D67 37.5%,
-                #E22A86 37.5%, #E22A86 50%,
-                #C43A99 50%, #C43A99 62.5%,
-                #9557AE 62.5%, #9557AE 75%,
-                #5C82BF 75%, #5C82BF 87.5%,
-                #3497C8 87.5%, #3497C8 100%
-            ) !important;
+            background: none !important;
             box-shadow: none !important;
         }
 
-        #wyws-luxembourg-container .kw-lux-slider-bar::after {
-            content: "" !important;
-            position: absolute !important;
-            inset: 0 !important;
-            background: linear-gradient(90deg,
-                transparent 0%, transparent calc(12.5% - 1px), #00384D calc(12.5% - 1px), #00384D calc(12.5% + 1px), transparent calc(12.5% + 1px),
-                transparent calc(25% - 1px), #00384D calc(25% - 1px), #00384D calc(25% + 1px), transparent calc(25% + 1px),
-                transparent calc(37.5% - 1px), #00384D calc(37.5% - 1px), #00384D calc(37.5% + 1px), transparent calc(37.5% + 1px),
-                transparent calc(50% - 1px), #00384D calc(50% - 1px), #00384D calc(50% + 1px), transparent calc(50% + 1px),
-                transparent calc(62.5% - 1px), #00384D calc(62.5% - 1px), #00384D calc(62.5% + 1px), transparent calc(62.5% + 1px),
-                transparent calc(75% - 1px), #00384D calc(75% - 1px), #00384D calc(75% + 1px), transparent calc(75% + 1px),
-                transparent calc(87.5% - 1px), #00384D calc(87.5% - 1px), #00384D calc(87.5% + 1px), transparent calc(87.5% + 1px),
-                transparent 100%
-            ) !important;
-            pointer-events: none !important;
-            z-index: 2 !important;
-        }
-
-        #wyws-luxembourg-container .kw-lux-grid-lines,
-        #wyws-luxembourg-container .kw-lux-line {
-            display: none !important;
-        }
-
-        #wyws-luxembourg-container .kw-lux-labels {
-            position: absolute !important;
-            left: 0 !important;
-            right: 0 !important;
-            bottom: 0 !important;
-            height: 55px !important;
+        #wyws-luxembourg-container .kw-lux-scale-segment {
+            position: relative !important;
             display: flex !important;
             align-items: center !important;
-            justify-content: space-between !important;
-            margin: 0 !important;
-            padding: 0 36px !important;
-            box-sizing: border-box !important;
+            justify-content: center !important;
             color: #FFFFFF !important;
             font-size: 16px !important;
             font-weight: 900 !important;
             line-height: 1 !important;
             text-shadow: 0 1px 2px rgba(0,0,0,0.35) !important;
-            pointer-events: none !important;
-            z-index: 4 !important;
             font-family: 'Segoe UI', Arial, sans-serif !important;
+        }
+
+        #wyws-luxembourg-container .kw-lux-scale-segment:not(:last-child)::after {
+            content: "" !important;
+            position: absolute !important;
+            top: 0 !important;
+            right: -1px !important;
+            width: 2px !important;
+            height: 100% !important;
+            background: #00384D !important;
+            z-index: 2 !important;
+        }
+
+        #wyws-luxembourg-container .kw-lux-scale-30 { background: #F28A34 !important; }
+        #wyws-luxembourg-container .kw-lux-scale-40 { background: #EB7547 !important; }
+        #wyws-luxembourg-container .kw-lux-scale-50 { background: #E94D67 !important; }
+        #wyws-luxembourg-container .kw-lux-scale-60 { background: #E22A86 !important; }
+        #wyws-luxembourg-container .kw-lux-scale-70 { background: #C43A99 !important; }
+        #wyws-luxembourg-container .kw-lux-scale-80 { background: #9557AE !important; }
+        #wyws-luxembourg-container .kw-lux-scale-90 { background: #5C82BF !important; }
+        #wyws-luxembourg-container .kw-lux-scale-100 { background: #3497C8 !important; }
+
+        #wyws-luxembourg-container .kw-lux-grid-lines,
+        #wyws-luxembourg-container .kw-lux-line,
+        #wyws-luxembourg-container .kw-lux-labels {
+            display: none !important;
         }
 
         #wyws-luxembourg-container .kw-lux-water-drop {
@@ -136,13 +123,51 @@
         document.head.appendChild(styleTag);
     }
 
+    function makeSegment(value) {
+        const segment = document.createElement('div');
+        segment.className = 'kw-lux-scale-segment kw-lux-scale-' + value;
+        segment.textContent = String(value);
+        return segment;
+    }
+
+    function rebuildScale() {
+        const root = document.getElementById('wyws-luxembourg-container');
+        if (!root) return false;
+
+        const bar = root.querySelector('.kw-lux-slider-bar');
+        if (!bar) return false;
+
+        if (!bar.dataset.waterScore1545Built) {
+            while (bar.firstChild) bar.removeChild(bar.firstChild);
+            [30, 40, 50, 60, 70, 80, 90, 100].forEach(function(value) {
+                bar.appendChild(makeSegment(value));
+            });
+            bar.dataset.waterScore1545Built = 'true';
+        }
+
+        const labels = root.querySelector('.kw-lux-labels');
+        if (labels) labels.style.display = 'none';
+
+        const drop = root.querySelector('.kw-lux-water-drop');
+        if (drop) {
+            Array.prototype.forEach.call(drop.children, function(child) {
+                child.style.display = 'none';
+            });
+        }
+
+        injectVisualOverride();
+        return true;
+    }
+
     const scriptTag = document.createElement('script');
     scriptTag.src = ORIGINAL_WIDGET_URL;
     scriptTag.async = false;
     scriptTag.onload = function() {
         injectVisualOverride();
-        setTimeout(injectVisualOverride, 100);
-        setTimeout(injectVisualOverride, 500);
+        rebuildScale();
+        setTimeout(rebuildScale, 100);
+        setTimeout(rebuildScale, 500);
+        setTimeout(rebuildScale, 1000);
     };
     document.head.appendChild(scriptTag);
 })();
